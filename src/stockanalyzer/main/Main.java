@@ -9,6 +9,7 @@ import stockanalyzer.controller.StockController;
 //  Patrick Dahlin (41117)
 //  Linus Wiberg   (@TODO)
 //
+// JSON Parser from : https://github.com/stleary/JSON-java
 
 ///
 ///	Moment 1: View & ability to fetch data from HTTPS API
