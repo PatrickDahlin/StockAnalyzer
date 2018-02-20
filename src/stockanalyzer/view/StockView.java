@@ -11,5 +11,6 @@ public class StockView {
 		controller = contrlr;
 		//@TODO initialize window (Swing? FX?)
 		// set up listeners for buttons and connect them to controller
+		// NO FILLERS ALLOWEDED!!!1!!
 	}
 }
