@@ -1,5 +1,6 @@
 package stockanalyzer.controller;
 
+import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.view.StockView;
 
@@ -21,7 +22,7 @@ public class StockController {
 	
 	private String getAPIData(APICallParams params)
 	{
-		
+		return "";
 	}
 	
 }
