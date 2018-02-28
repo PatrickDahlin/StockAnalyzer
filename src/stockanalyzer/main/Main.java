@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockValue;
+import stockanalyzer.view.StockView;
 
 
 //
 //	Stock Analyzer
 //
 //  Patrick Dahlin (41117)
-//  Linus Wiberg   (@TODO)
+//  Linus Wiberg   (42101)
 //
 // JSON Parser from : https://github.com/stleary/JSON-java
 
@@ -72,6 +73,7 @@ public class Main {
 	public static void main(String[] args) {
 		Main m = new Main(); // @Testing
 		//new StockController();
+		StockView.test();
 	}
 
 }
