@@ -73,7 +73,8 @@ public class Main {
 	public static void main(String[] args) {
 		//Main m = new Main(); // @Testing
 		//new StockController();
-		StockView.test();
+        StockView tester = new StockView(null);
+        tester.test();
 	}
 
 }

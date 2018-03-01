@@ -16,10 +16,12 @@ public class StockView {
 		//@TODO initialize window (Swing? FX?)
 	}
 
-	public static void test(){
+	public void test(){
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
         stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        //Sets
 
         //Created and adds JPanel to frame
         JPanel compPanel = new JPanel();
