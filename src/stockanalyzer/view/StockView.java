@@ -13,10 +13,12 @@ public class StockView {
 	public StockView(StockController contrlr)
 	{
 		controller = contrlr;
-		//@TODO initialize window (Swing? FX?)
+
+		BuildWindow();
 	}
 
-	public void test(){
+
+	private void BuildWindow() {
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
         stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -55,7 +57,7 @@ public class StockView {
         cons.gridx = 1;
         cons.gridy = 0;
         cons.ipadx = 300;
-        JComboBox datSerBox = new JComboBox();
+        JComboBox<String> datSerBox = new JComboBox<String>(); // @TODO add <String> to get rid of warnings, it's a generic type, and it'll contain strings
         datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);

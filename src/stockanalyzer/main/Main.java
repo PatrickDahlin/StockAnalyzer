@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import stockanalyzer.controller.StockController;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockValue;
@@ -72,9 +73,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		//Main m = new Main(); // @Testing
-		//new StockController();
-        StockView tester = new StockView(null);
-        tester.test();
+		new StockController();
+        //StockView tester = new StockView(null);
+        //tester.test();
 	}
 
 }

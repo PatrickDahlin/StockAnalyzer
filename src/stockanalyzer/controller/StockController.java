@@ -14,7 +14,9 @@ public class StockController {
 	public StockController()
 	{
 		//Main entrypoint of application
-		//@TODO Setup view and model
+		
+		stockModel = new StockModel(null); // Create empty StockModel
+		stockView = new StockView(this);
 		
 	}
 		
