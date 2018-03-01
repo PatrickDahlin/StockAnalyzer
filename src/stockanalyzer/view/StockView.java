@@ -19,31 +19,32 @@ public class StockView {
 	public static void test(){
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
-        stockView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //Created and adds JPanel to frame
         JPanel compPanel = new JPanel();
         stockView.add(compPanel);
-        compPanel.setBorder(new EmptyBorder(10,10,10,10));
+        compPanel.setBorder(new EmptyBorder(15,15,15,15));
 
         //Layout Settings
         GridBagLayout stockLayout = new GridBagLayout();
         GridBagConstraints cons = new GridBagConstraints();
         compPanel.setLayout(stockLayout);
-        cons.fill = GridBagConstraints.HORIZONTAL;
+        cons.fill = GridBagConstraints.BOTH;
 
         //Default Constraints
         cons.weighty = 1.0;
-        cons.ipadx = 100;
+        cons.ipadx = 30;
 
         //Create border to add spacing between components
-        EmptyBorder spaceBorder = new EmptyBorder(5,0,5,0);
+        EmptyBorder spaceBorder = new EmptyBorder(7,0,7,0);
 
         //Adds components
 
         //1st Row
         cons.gridx = 0;
         cons.gridy = 0;
+        cons.ipadx = 10;
         JLabel datSerLbl = new JLabel("Data Series:");
         datSerLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerLbl, cons);
@@ -51,10 +52,12 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 0;
+        cons.ipadx = 300;
         JComboBox datSerBox = new JComboBox();
         datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
+        cons.ipadx = 30;
 
         //2st Row
         cons.gridx = 0;
