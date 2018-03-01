@@ -19,7 +19,7 @@ public class StockView {
 	public static void test(){
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
-        stockView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        stockView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         //Created and adds JPanel to frame
         JPanel compPanel = new JPanel();
@@ -40,6 +40,8 @@ public class StockView {
         EmptyBorder spaceBorder = new EmptyBorder(5,0,5,0);
 
         //Adds components
+
+        //1st Row
         cons.gridx = 0;
         cons.gridy = 0;
         JLabel datSerLbl = new JLabel("Data Series:");
@@ -47,13 +49,14 @@ public class StockView {
         stockLayout.setConstraints(datSerLbl, cons);
         compPanel.add(datSerLbl);
 
-        cons.gridx = 2;
+        cons.gridx = 1;
         cons.gridy = 0;
         JComboBox datSerBox = new JComboBox();
         datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
 
+        //2st Row
         cons.gridx = 0;
         cons.gridy = 1;
         JLabel timSerLbl = new JLabel("Time Series:");
@@ -61,13 +64,57 @@ public class StockView {
         stockLayout.setConstraints(timSerLbl, cons);
         compPanel.add(timSerLbl);
 
-        cons.gridx = 2;
+        cons.gridx = 1;
         cons.gridy = 1;
         JComboBox timSerBox = new JComboBox();
         timSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timSerBox, cons);
         compPanel.add(timSerBox);
 
+        //3st Row
+        cons.gridx = 0;
+        cons.gridy = 2;
+        JLabel smblLbl = new JLabel("Symbol:");
+        smblLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(smblLbl, cons);
+        compPanel.add(smblLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 2;
+        JComboBox smblBox = new JComboBox();
+        smblBox.setBorder(spaceBorder);
+        stockLayout.setConstraints(smblBox, cons);
+        compPanel.add(smblBox);
+
+        //4st Row
+        cons.gridx = 0;
+        cons.gridy = 3;
+        JLabel timIntLbl = new JLabel("Time Series:");
+        timIntLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(timIntLbl, cons);
+        compPanel.add(timIntLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 3;
+        JComboBox timIntBox = new JComboBox();
+        timIntBox.setBorder(spaceBorder);
+        stockLayout.setConstraints(timIntBox, cons);
+        compPanel.add(timIntBox);
+
+        //5st Row
+        cons.gridx = 0;
+        cons.gridy = 4;
+        JLabel outSizLbl = new JLabel("Time Series:");
+        outSizLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(outSizLbl, cons);
+        compPanel.add(outSizLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 4;
+        JComboBox outSizBox = new JComboBox();
+        outSizBox.setBorder(spaceBorder);
+        stockLayout.setConstraints(outSizBox, cons);
+        compPanel.add(outSizBox);
 
         //Displays window
         stockView.pack();
