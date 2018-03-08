@@ -1,16 +1,17 @@
 package stockanalyzer.main;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
+import stockanalyzer.controller.StockAPI;
 import stockanalyzer.controller.StockController;
 import stockanalyzer.json.JSONObject;
+import stockanalyzer.model.APICallParams;
+import stockanalyzer.model.APICallParams.DataType;
+import stockanalyzer.model.APICallParams.Interval;
+import stockanalyzer.model.APICallParams.OutputSize;
+import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockValue;
-import stockanalyzer.view.StockView;
 
 
 //
@@ -33,33 +34,17 @@ public class Main {
 
 	public Main()
 	{
-		String response = "";
-		try {
-			URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=15min&outputsize=full&apikey=XVXEHHDH9BOTXCBQ");
-		
-			URLConnection con = (URLConnection)url.openConnection();
-			
-			BufferedReader br =
-				new BufferedReader(
-					new InputStreamReader(con.getInputStream()));
-
-			String input;
-
-			while ((input = br.readLine()) != null)
-				response += input + "\n";
-			
-			br.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		JSONObject myjson = new JSONObject(response);
+		JSONObject myjson = StockAPI.getRequest(new APICallParams(TimeSeries.TIME_SERIES_INTRADAY,
+																	Interval.OneMin,
+																	"MSFT",
+																	DataType.JSON,
+																	OutputSize.FULL,
+																	StockController.VANTAGE_API_KEY));
 		
 		StockModel model;
 		
 		try {
-			model = new StockModel(myjson);
+			model = new StockModel(myjson, true);
 		} catch (Exception e) {
 			e.printStackTrace(); return;
 		}
@@ -70,7 +55,7 @@ public class Main {
 			System.out.println(tmp.time + " : " + tmp.high);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		//Main m = new Main(); // @Testing
 		new StockController();

@@ -1,6 +1,8 @@
 package stockanalyzer.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import stockanalyzer.json.JSONObject;
 
@@ -24,8 +26,9 @@ public class StockModel {
 	private ArrayList<StockValue> data;
 	// ---
 	
+	public StockModel(JSONObject root) { this(root, false); }
 	
-	public StockModel(JSONObject root)
+	public StockModel(JSONObject root, boolean sorted)
 	{
 		data = new ArrayList<StockValue>();
 	
@@ -36,6 +39,17 @@ public class StockModel {
 		} catch (Exception e) {
 			System.err.println("StockModel was constructed with invalid JSON data!");
 		}
+		
+		if(!sorted) return;
+		
+		Collections.sort(data, new Comparator<StockValue>() {
+	        @Override
+	        public int compare(StockValue fruit2, StockValue fruit1)
+	        {
+
+	            return  fruit1.time.compareTo(fruit2.time);
+	        }
+	    });
 	}
 	
 	public ArrayList<StockValue> getData()
@@ -82,7 +96,7 @@ public class StockModel {
 			JSONObject child = tmp.optJSONObject(time);
 			if(child == null || child.keySet() == null) break;
 			
-			System.out.println("Time: "+time);
+			//System.out.println("Time: "+time);
 			
 			// Make a stockvalue
 			StockValue stockVal = new StockValue();
@@ -91,7 +105,7 @@ public class StockModel {
 			// And loop it's children to fill in it's values
 			for(String values : child.keySet())
 			{
-				System.out.println("\t" + values + " : " + child.get(values));
+				//System.out.println("\t" + values + " : " + child.get(values));
 				String value = child.getString(values);
 				if(values.contains("high"))  stockVal.high = Float.parseFloat(value);
 				if(values.contains("low"))   stockVal.low = Float.parseFloat(value);
