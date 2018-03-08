@@ -9,6 +9,13 @@ import java.awt.*;
 public class StockView {
 	
 	private StockController controller;
+	private JComboBox<String> datSerBox;
+	private JComboBox<String> timSerBox;
+	private JComboBox<String> smblBox;
+	private JComboBox<String> timIntBox;
+	private JComboBox<String> outSizBox;
+    private JButton queryButton;
+	private JTextArea textField;
 	
 	public StockView(StockController contrlr)
 	{
@@ -59,7 +66,7 @@ public class StockView {
         cons.gridx = 1;
         cons.gridy = 0;
         cons.ipadx = 300;
-        JComboBox<String> datSerBox = new JComboBox<String>();
+        datSerBox = new JComboBox<String>();
         datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
@@ -75,7 +82,7 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 1;
-        JComboBox timSerBox = new JComboBox();
+        timSerBox = new JComboBox<String>();
         timSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timSerBox, cons);
         compPanel.add(timSerBox);
@@ -90,7 +97,7 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 2;
-        JComboBox smblBox = new JComboBox();
+        smblBox = new JComboBox<String>();
         smblBox.setBorder(spaceBorder);
         stockLayout.setConstraints(smblBox, cons);
         compPanel.add(smblBox);
@@ -105,7 +112,7 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 3;
-        JComboBox timIntBox = new JComboBox();
+        timIntBox = new JComboBox<String>();
         timIntBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntBox, cons);
         compPanel.add(timIntBox);
@@ -120,10 +127,20 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 4;
-        JComboBox outSizBox = new JComboBox();
+        outSizBox = new JComboBox<String>();
         outSizBox.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizBox, cons);
         compPanel.add(outSizBox);
+
+        //Adds query button
+        cons.gridx = 1;
+        cons.gridy = 5;
+        cons.weighty = 0.5;
+        cons.weightx = 0.5;
+        cons.fill = GridBagConstraints.CENTER;
+        queryButton = new JButton("--- Do Query ---");
+        stockLayout.setConstraints(queryButton, cons);
+        compPanel.add(queryButton);
 
         //adds temp label to 2nd grid where graph is supposed to be
         stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
@@ -134,7 +151,7 @@ public class StockView {
         textPanel.setBorder(new EmptyBorder(0,15,15,15));
         textPanel.setLayout(new GridLayout(1,1));
         stockView.add(textPanel);
-        JTextArea textField = new JTextArea();
+        textField = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textField);
         textPanel.add(scrollPane);
 
