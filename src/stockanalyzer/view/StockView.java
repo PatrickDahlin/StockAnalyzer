@@ -5,6 +5,8 @@ import stockanalyzer.controller.StockController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StockView {
 	
@@ -22,6 +24,8 @@ public class StockView {
 		controller = contrlr;
 
 		BuildWindow();
+
+		componentListeners();
 	}
 
 	private void BuildWindow() {
@@ -169,7 +173,14 @@ public class StockView {
     }
 
     private void componentListeners() {
-        //@TODO Make listeners here
+
+	    //ActionListener for query Button
+        queryButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                System.out.println("You touched it!");
+            }
+        });
+
     }
 
 }
