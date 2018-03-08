@@ -24,7 +24,6 @@ public class StockView {
 		BuildWindow();
 	}
 
-
 	private void BuildWindow() {
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
@@ -160,4 +159,17 @@ public class StockView {
         stockView.setVisible(true);
         stockView.setLocationRelativeTo(null);
 	}
+
+    public void textFieldData() {
+        //@TODO Do stuff here that makes TextFieldChange change
+    }
+
+    public void graphData() {
+	    //@TODO Do stuff here that makes non-existing Graph change
+    }
+
+    private void componentListeners() {
+        //@TODO Make listeners here
+    }
+
 }
