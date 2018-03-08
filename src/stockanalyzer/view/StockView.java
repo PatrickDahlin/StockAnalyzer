@@ -22,8 +22,10 @@ public class StockView {
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
         stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        stockView.setResizable(false); // removes ability to resize the window
 
-        //Sets
+        //Sets layout for JFrame
+        stockView.setLayout(new GridLayout(2,2));
 
         //Created and adds JPanel to frame
         JPanel compPanel = new JPanel();
@@ -57,7 +59,7 @@ public class StockView {
         cons.gridx = 1;
         cons.gridy = 0;
         cons.ipadx = 300;
-        JComboBox<String> datSerBox = new JComboBox<String>(); // @TODO add <String> to get rid of warnings, it's a generic type, and it'll contain strings
+        JComboBox<String> datSerBox = new JComboBox<String>();
         datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
@@ -123,9 +125,22 @@ public class StockView {
         stockLayout.setConstraints(outSizBox, cons);
         compPanel.add(outSizBox);
 
+        //adds temp label to 2nd grid where graph is supposed to be
+        stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
+        //@TODO Add the actual graph and remove temp FILLER
+
+        //Adds JPanel & components to 3rd grid
+        JPanel textPanel = new JPanel();
+        textPanel.setBorder(new EmptyBorder(0,15,15,15));
+        textPanel.setLayout(new GridLayout(1,1));
+        stockView.add(textPanel);
+        JTextArea textField = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textField);
+        textPanel.add(scrollPane);
+
         //Displays window
         stockView.pack();
         stockView.setVisible(true);
         stockView.setLocationRelativeTo(null);
-	} //PLACEHOLDER UNTIL I KNOW HOW THE VIEW WILL RUN. I JUST RUN FROM MAIN NOW. HUMAN BENIS
+	}
 }
