@@ -1,12 +1,15 @@
 package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
+import stockanalyzer.model.APICallParams;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class StockView {
 	
@@ -24,6 +27,8 @@ public class StockView {
 		controller = contrlr;
 
 		BuildWindow();
+
+		setOptions();
 
 		componentListeners();
 	}
@@ -170,6 +175,31 @@ public class StockView {
 
     public void graphData() {
 	    //@TODO Do stuff here that makes non-existing Graph change
+    }
+
+    private void setOptions() {
+	    //Adds options to JComboBoxes
+        String[] dataOptions = {"1. open"};
+        itemAdder(datSerBox, dataOptions);
+
+        String[] seriesOptions = {"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED", "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"};
+        itemAdder(timSerBox, seriesOptions);
+
+        String[] symbolOptions = {"MSFT"};
+        itemAdder(smblBox, symbolOptions);
+
+        String[] intervalOptions = {"15min"};
+        itemAdder(timIntBox, intervalOptions);
+
+        String[] sizeOptions = {"full"};
+        itemAdder(outSizBox, sizeOptions);
+    }
+
+    private void itemAdder(JComboBox<String> box, String[] options){
+	    //Method for adding items to JComboBox
+        for(int i = 0; i != options.length; i++){
+            box.addItem(options[i]);
+        }
     }
 
     private void componentListeners() {
