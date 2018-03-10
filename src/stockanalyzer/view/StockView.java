@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -28,11 +29,14 @@ public class StockView {
 
 		BuildWindow();
 
-		setOptions();
+		//Sets default options JComboBox
+        ArrayList<String> seriesOptions = new ArrayList<String>(
+                Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+                        "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
+        itemAdder(timSerBox, seriesOptions);
 
 		componentListeners();
 	}
-
 	private void BuildWindow() {
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
@@ -177,39 +181,39 @@ public class StockView {
 	    //@TODO Do stuff here that makes non-existing Graph change
     }
 
-    private void setOptions() {
-	    //Adds options to JComboBoxes
-        String[] dataOptions = {"1. open"};
-        itemAdder(datSerBox, dataOptions);
-
-        String[] seriesOptions = {"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED", "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"};
-        itemAdder(timSerBox, seriesOptions);
-
-        String[] symbolOptions = {"MSFT"};
-        itemAdder(smblBox, symbolOptions);
-
-        String[] intervalOptions = {"15min"};
-        itemAdder(timIntBox, intervalOptions);
-
-        String[] sizeOptions = {"full"};
-        itemAdder(outSizBox, sizeOptions);
-    }
-
-    private void itemAdder(JComboBox<String> box, String[] options){
+    private void itemAdder(JComboBox<String> box, ArrayList<String> options){
 	    //Method for adding items to JComboBox
-        for(int i = 0; i != options.length; i++){
-            box.addItem(options[i]);
+        for(int i = 0; i != options.size(); i++){
+            box.addItem(options.get(i));
         }
     }
 
     private void componentListeners() {
 
-	    //ActionListener for query Button
-        queryButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                System.out.println("You touched it!");
+        //ActionListener for time series
+        timSerBox.addActionListener(evt -> {
+
+            //Depending on choice
+            if(timSerBox.getSelectedIndex() == 0){
+
+            } else if (timSerBox.getSelectedIndex() == 1) {
+
+            } else if (timSerBox.getSelectedIndex() == 2) {
+
+            } else if (timSerBox.getSelectedIndex() == 3) {
+
+            } else if (timSerBox.getSelectedIndex() == 4) {
+
+            } else if (timSerBox.getSelectedIndex() == 5) {
+
+            } else if (timSerBox.getSelectedIndex() == 6) {
+
             }
+
         });
+
+	    //ActionListener for query Button
+        queryButton.addActionListener(evt -> System.out.println("You touched it!"));
 
     }
 
