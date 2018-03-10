@@ -1,16 +1,12 @@
 package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
-import stockanalyzer.model.APICallParams;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class StockView {
 	
@@ -62,7 +58,7 @@ public class StockView {
         cons.ipadx = 30;
 
         //Create border to add spacing between components
-        EmptyBorder spaceBorder = new EmptyBorder(7,0,7,0);
+        EmptyBorder spaceBorder = new EmptyBorder(14,0,0,0);
 
         //Adds components
 
@@ -71,7 +67,6 @@ public class StockView {
         cons.gridy = 0;
         cons.ipadx = 10;
         JLabel datSerLbl = new JLabel("Data Series:");
-        datSerLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerLbl, cons);
         compPanel.add(datSerLbl);
 
@@ -79,7 +74,6 @@ public class StockView {
         cons.gridy = 0;
         cons.ipadx = 300;
         datSerBox = new JComboBox<String>();
-        datSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
         cons.ipadx = 30;
@@ -117,7 +111,7 @@ public class StockView {
         //4st Row
         cons.gridx = 0;
         cons.gridy = 3;
-        JLabel timIntLbl = new JLabel("Time Series:");
+        JLabel timIntLbl = new JLabel("Time Interval:");
         timIntLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntLbl, cons);
         compPanel.add(timIntLbl);
@@ -132,7 +126,7 @@ public class StockView {
         //5st Row
         cons.gridx = 0;
         cons.gridy = 4;
-        JLabel outSizLbl = new JLabel("Time Series:");
+        JLabel outSizLbl = new JLabel("Output Size:");
         outSizLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizLbl, cons);
         compPanel.add(outSizLbl);
@@ -150,6 +144,7 @@ public class StockView {
         cons.weighty = 0.5;
         cons.weightx = 0.5;
         cons.fill = GridBagConstraints.CENTER;
+        cons.insets = new Insets(14,0,0,0);
         queryButton = new JButton("--- Do Query ---");
         stockLayout.setConstraints(queryButton, cons);
         compPanel.add(queryButton);
