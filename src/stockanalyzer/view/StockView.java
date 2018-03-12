@@ -4,19 +4,41 @@ import stockanalyzer.controller.StockController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.html.Option;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StockView {
 	
 	private StockController controller;
-	
+	private JComboBox<String> datSerBox;
+	private JComboBox<String> timSerBox;
+	private JComboBox<String> smblBox;
+	private JComboBox<String> timIntBox;
+	private JComboBox<String> outSizBox;
+    private JButton queryButton;
+	private JTextArea textField;
+
 	public StockView(StockController contrlr)
 	{
 		controller = contrlr;
 
 		BuildWindow();
-	}
 
+        ArrayList<String> options = new ArrayList<String>();
+
+
+
+        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+                "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
+        itemAdder(timSerBox, options);
+        options.clear();
+
+        defaultOptions();
+
+		componentListeners();
+	}
 
 	private void BuildWindow() {
 	    //Creates frame
@@ -43,7 +65,7 @@ public class StockView {
         cons.ipadx = 30;
 
         //Create border to add spacing between components
-        EmptyBorder spaceBorder = new EmptyBorder(7,0,7,0);
+        EmptyBorder spaceBorder = new EmptyBorder(14,0,0,0);
 
         //Adds components
 
@@ -52,15 +74,13 @@ public class StockView {
         cons.gridy = 0;
         cons.ipadx = 10;
         JLabel datSerLbl = new JLabel("Data Series:");
-        datSerLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(datSerLbl, cons);
         compPanel.add(datSerLbl);
 
         cons.gridx = 1;
         cons.gridy = 0;
         cons.ipadx = 300;
-        JComboBox<String> datSerBox = new JComboBox<String>();
-        datSerBox.setBorder(spaceBorder);
+        datSerBox = new JComboBox<String>();
         stockLayout.setConstraints(datSerBox, cons);
         compPanel.add(datSerBox);
         cons.ipadx = 30;
@@ -75,7 +95,7 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 1;
-        JComboBox timSerBox = new JComboBox();
+        timSerBox = new JComboBox<String>();
         timSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timSerBox, cons);
         compPanel.add(timSerBox);
@@ -90,7 +110,7 @@ public class StockView {
 
         cons.gridx = 1;
         cons.gridy = 2;
-        JComboBox smblBox = new JComboBox();
+        smblBox = new JComboBox<String>();
         smblBox.setBorder(spaceBorder);
         stockLayout.setConstraints(smblBox, cons);
         compPanel.add(smblBox);
@@ -98,14 +118,14 @@ public class StockView {
         //4st Row
         cons.gridx = 0;
         cons.gridy = 3;
-        JLabel timIntLbl = new JLabel("Time Series:");
+        JLabel timIntLbl = new JLabel("Time Interval:");
         timIntLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntLbl, cons);
         compPanel.add(timIntLbl);
 
         cons.gridx = 1;
         cons.gridy = 3;
-        JComboBox timIntBox = new JComboBox();
+        timIntBox = new JComboBox<String>();
         timIntBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntBox, cons);
         compPanel.add(timIntBox);
@@ -113,17 +133,28 @@ public class StockView {
         //5st Row
         cons.gridx = 0;
         cons.gridy = 4;
-        JLabel outSizLbl = new JLabel("Time Series:");
+        JLabel outSizLbl = new JLabel("Output Size:");
         outSizLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizLbl, cons);
         compPanel.add(outSizLbl);
 
         cons.gridx = 1;
         cons.gridy = 4;
-        JComboBox outSizBox = new JComboBox();
+        outSizBox = new JComboBox<String>();
         outSizBox.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizBox, cons);
         compPanel.add(outSizBox);
+
+        //Adds query button
+        cons.gridx = 1;
+        cons.gridy = 5;
+        cons.weighty = 0.5;
+        cons.weightx = 0.5;
+        cons.fill = GridBagConstraints.CENTER;
+        cons.insets = new Insets(14,0,0,0);
+        queryButton = new JButton("--- Do Query ---");
+        stockLayout.setConstraints(queryButton, cons);
+        compPanel.add(queryButton);
 
         //adds temp label to 2nd grid where graph is supposed to be
         stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
@@ -134,7 +165,7 @@ public class StockView {
         textPanel.setBorder(new EmptyBorder(0,15,15,15));
         textPanel.setLayout(new GridLayout(1,1));
         stockView.add(textPanel);
-        JTextArea textField = new JTextArea();
+        textField = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textField);
         textPanel.add(scrollPane);
 
@@ -143,4 +174,80 @@ public class StockView {
         stockView.setVisible(true);
         stockView.setLocationRelativeTo(null);
 	}
+
+    public void textFieldData() {
+        //@TODO Do stuff here that makes TextFieldChange change
+    }
+
+    public void graphData() {
+	    //@TODO Do stuff here that makes non-existing Graph change
+    }
+
+    private void defaultOptions() {
+
+        ReadOptions reader = new ReadOptions();
+
+        ArrayList<String> options = new ArrayList<String>();
+
+        options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
+        itemAdder(datSerBox, options);
+        options.clear();
+
+        itemAdder(smblBox, reader.getOptions("symbols"));
+
+        options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
+        itemAdder(timIntBox, options);
+        options.clear();
+
+        options.addAll(Arrays.asList("compact", "full"));
+        itemAdder(outSizBox, options);
+        options.clear();
+
+    }
+
+    private void itemAdder(JComboBox<String> box, ArrayList<String> options){
+
+        //Makes sure ArrayList isn't empty
+        if (options.size() == 0){
+            return;
+        }
+
+        //Method for adding items to JComboBox
+        for(int i = 0; i != options.size(); i++){
+            box.addItem(options.get(i));
+        }
+    }
+
+    private void componentListeners() {
+
+        //ActionListener for time series
+        timSerBox.addActionListener(evt -> {
+
+            //Depending on choice
+            switch (timSerBox.getSelectedIndex()) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default:
+                    break;
+            }
+
+        });
+
+	    //ActionListener for query Button
+        queryButton.addActionListener(evt -> System.out.println("You touched it!"));
+
+    }
+
 }
