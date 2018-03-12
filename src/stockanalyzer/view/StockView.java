@@ -18,7 +18,9 @@ public class StockView {
 	private JComboBox<String> outSizBox;
     private JButton queryButton;
 	private JTextArea textField;
-	
+
+    private ReadOptions reader = new ReadOptions();
+
 	public StockView(StockController contrlr)
 	{
 		controller = contrlr;
@@ -26,10 +28,16 @@ public class StockView {
 		BuildWindow();
 
 		//Sets default options JComboBox
+        ArrayList<String> dataOptions = new ArrayList<String>(
+                Arrays.asList("open", "high", "low", "close", "volume"));
+        itemAdder(datSerBox, dataOptions);
+
         ArrayList<String> seriesOptions = new ArrayList<String>(
                 Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
                         "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
         itemAdder(timSerBox, seriesOptions);
+
+        itemAdder(smblBox, reader.getOptions("symbols"));
 
 		componentListeners();
 	}
@@ -177,6 +185,12 @@ public class StockView {
     }
 
     private void itemAdder(JComboBox<String> box, ArrayList<String> options){
+
+	    //Makes sure ArrayList isn't empty
+	    if (options.size() == 0){
+	        return;
+        }
+
 	    //Method for adding items to JComboBox
         for(int i = 0; i != options.size(); i++){
             box.addItem(options.get(i));
@@ -189,20 +203,23 @@ public class StockView {
         timSerBox.addActionListener(evt -> {
 
             //Depending on choice
-            if(timSerBox.getSelectedIndex() == 0){
-
-            } else if (timSerBox.getSelectedIndex() == 1) {
-
-            } else if (timSerBox.getSelectedIndex() == 2) {
-
-            } else if (timSerBox.getSelectedIndex() == 3) {
-
-            } else if (timSerBox.getSelectedIndex() == 4) {
-
-            } else if (timSerBox.getSelectedIndex() == 5) {
-
-            } else if (timSerBox.getSelectedIndex() == 6) {
-
+            switch (timSerBox.getSelectedIndex()) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default:
+                    break;
             }
 
         });
