@@ -27,20 +27,11 @@ public class StockView {
 
 		BuildWindow();
 
-		//Sets default options JComboBox
-        ArrayList<String> dataOptions = new ArrayList<String>(
-                Arrays.asList("open", "high", "low", "close", "volume"));
-        itemAdder(datSerBox, dataOptions);
-
-        ArrayList<String> seriesOptions = new ArrayList<String>(
-                Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
-                        "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
-        itemAdder(timSerBox, seriesOptions);
-
-        itemAdder(smblBox, reader.getOptions("symbols"));
+		defaultOptions();
 
 		componentListeners();
 	}
+
 	private void BuildWindow() {
 	    //Creates frame
         JFrame stockView = new JFrame("StockView");
@@ -175,6 +166,32 @@ public class StockView {
         stockView.setVisible(true);
         stockView.setLocationRelativeTo(null);
 	}
+
+	private void defaultOptions() {
+
+        //Sets default options JComboBox
+        ArrayList<String> options = new ArrayList<String>();
+
+        options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
+        itemAdder(datSerBox, options);
+        options.clear();
+
+        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+                "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
+        itemAdder(timSerBox, options);
+        options.clear();
+
+        itemAdder(smblBox, reader.getOptions("symbols"));
+
+        options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
+        itemAdder(timIntBox, options);
+        options.clear();
+
+        options.addAll(Arrays.asList("compact", "full"));
+        itemAdder(outSizBox, options);
+        options.clear();
+
+    }
 
     public void textFieldData() {
         //@TODO Do stuff here that makes TextFieldChange change
