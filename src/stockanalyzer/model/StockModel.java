@@ -10,27 +10,37 @@ import stockanalyzer.json.JSONObject;
  * Immutable class containing all the stock data
 */
 public class StockModel {
-	//@TODO Put all the data needed for the application
-	// eg. List of stock values returned by API
 	
+	// One value in the list of values returned by api
+	public class TimedValue
+	{
+		public String title;
+		public float value;
+		public TimedValue(String str, float val)
+		{
+			title = str;
+			value = val;
+		}
+	}
 	
-	// This represents one value at a given time for a stock
-	public class StockValue {
-		public String time;
-		public float high, low, open, close;
-		public long volume;
+	// This represents a stock value at a given time, it has multiple values (high,low,...)
+	public class StockEntry {
+		public String time = "";
+		public ArrayList<TimedValue> values = new ArrayList<TimedValue>();
 	}
 	
 	
-	// The actual content is kept in this array
-	private ArrayList<StockValue> data;
+	// The actual model content is kept in this array
+	private ArrayList<StockEntry> data;
 	// ---
 	
+	// Create a unsorted model
 	public StockModel(JSONObject root) { this(root, false); }
 	
+	// Create a model with sorted? data
 	public StockModel(JSONObject root, boolean sorted)
 	{
-		data = new ArrayList<StockValue>();
+		data = new ArrayList<StockEntry>();
 	
 		if(root == null) return; // We just want an empty model
 		
@@ -38,21 +48,22 @@ public class StockModel {
 			parseJSON(root);
 		} catch (Exception e) {
 			System.err.println("StockModel was constructed with invalid JSON data!");
+			e.printStackTrace();
 		}
 		
 		if(!sorted) return;
 		
-		Collections.sort(data, new Comparator<StockValue>() {
+		Collections.sort(data, new Comparator<StockEntry>() {
 	        @Override
-	        public int compare(StockValue fruit2, StockValue fruit1)
+	        public int compare(StockEntry entry1, StockEntry entry2)
 	        {
 
-	            return  fruit1.time.compareTo(fruit2.time);
+	            return  entry2.time.compareTo(entry1.time);
 	        }
 	    });
 	}
 	
-	public ArrayList<StockValue> getData()
+	public ArrayList<StockEntry> getData()
 	{
 		return data;
 	}
@@ -99,7 +110,7 @@ public class StockModel {
 			//System.out.println("Time: "+time);
 			
 			// Make a stockvalue
-			StockValue stockVal = new StockValue();
+			StockEntry stockVal = new StockEntry();
 			stockVal.time = time;
 			
 			// And loop it's children to fill in it's values
@@ -107,11 +118,12 @@ public class StockModel {
 			{
 				//System.out.println("\t" + values + " : " + child.get(values));
 				String value = child.getString(values);
-				if(values.contains("high"))  stockVal.high = Float.parseFloat(value);
+				stockVal.values.add(new TimedValue(values, Float.parseFloat(value)));
+				/*if(values.contains("high"))  stockVal.high = Float.parseFloat(value);
 				if(values.contains("low"))   stockVal.low = Float.parseFloat(value);
 				if(values.contains("open"))  stockVal.open = Float.parseFloat(value);
 				if(values.contains("close")) stockVal.close = Float.parseFloat(value);
-				if(values.contains("volume"))stockVal.volume = Long.parseLong(value);
+				if(values.contains("volume"))stockVal.volume = Long.parseLong(value);*/
 			}
 			data.add(stockVal);
 		}

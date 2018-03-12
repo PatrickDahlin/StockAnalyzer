@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.StockModel;
-import stockanalyzer.model.StockModel.StockValue;
+import stockanalyzer.model.StockModel.StockEntry;
 
 public class StockAPI {
 	

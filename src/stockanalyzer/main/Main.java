@@ -11,7 +11,8 @@ import stockanalyzer.model.APICallParams.Interval;
 import stockanalyzer.model.APICallParams.OutputSize;
 import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.model.StockModel;
-import stockanalyzer.model.StockModel.StockValue;
+import stockanalyzer.model.StockModel.StockEntry;
+import stockanalyzer.model.StockModel.TimedValue;
 
 
 //
@@ -34,6 +35,7 @@ public class Main {
 
 	public Main()
 	{
+		// @Cleanup this whole constructor will be removed, only for testing output from stockmodel atm
 		JSONObject myjson = StockAPI.getRequest(new APICallParams(TimeSeries.TIME_SERIES_INTRADAY,
 																	Interval.OneMin,
 																	"MSFT",
@@ -49,18 +51,20 @@ public class Main {
 			e.printStackTrace(); return;
 		}
 
-		ArrayList<StockValue> v = model.getData();
-		for(StockValue tmp : v)
+		ArrayList<StockEntry> v = model.getData();
+		for(StockEntry tmp : v)
 		{
-			System.out.println(tmp.time + " : " + tmp.high);
+			System.out.println(tmp.time + " : ");
+			for(TimedValue tmp2 : tmp.values)
+			{
+				System.out.println("\t "+tmp2.title +":"+tmp2.value);
+			}
 		}
 	}
 
 	public static void main(String[] args) {
 		//Main m = new Main(); // @Testing
 		new StockController();
-        //StockView tester = new StockView(null);
-        //tester.test();
 	}
 
 }
