@@ -4,6 +4,7 @@ import stockanalyzer.controller.StockController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,15 +20,22 @@ public class StockView {
     private JButton queryButton;
 	private JTextArea textField;
 
-    private ReadOptions reader = new ReadOptions();
-
 	public StockView(StockController contrlr)
 	{
 		controller = contrlr;
 
 		BuildWindow();
 
-		defaultOptions();
+        ArrayList<String> options = new ArrayList<String>();
+
+
+
+        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+                "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
+        itemAdder(timSerBox, options);
+        options.clear();
+
+        defaultOptions();
 
 		componentListeners();
 	}
@@ -167,18 +175,22 @@ public class StockView {
         stockView.setLocationRelativeTo(null);
 	}
 
-	private void defaultOptions() {
+    public void textFieldData() {
+        //@TODO Do stuff here that makes TextFieldChange change
+    }
 
-        //Sets default options JComboBox
+    public void graphData() {
+	    //@TODO Do stuff here that makes non-existing Graph change
+    }
+
+    private void defaultOptions() {
+
+        ReadOptions reader = new ReadOptions();
+
         ArrayList<String> options = new ArrayList<String>();
 
         options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
         itemAdder(datSerBox, options);
-        options.clear();
-
-        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
-                "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
-        itemAdder(timSerBox, options);
         options.clear();
 
         itemAdder(smblBox, reader.getOptions("symbols"));
@@ -193,22 +205,14 @@ public class StockView {
 
     }
 
-    public void textFieldData() {
-        //@TODO Do stuff here that makes TextFieldChange change
-    }
-
-    public void graphData() {
-	    //@TODO Do stuff here that makes non-existing Graph change
-    }
-
     private void itemAdder(JComboBox<String> box, ArrayList<String> options){
 
-	    //Makes sure ArrayList isn't empty
-	    if (options.size() == 0){
-	        return;
+        //Makes sure ArrayList isn't empty
+        if (options.size() == 0){
+            return;
         }
 
-	    //Method for adding items to JComboBox
+        //Method for adding items to JComboBox
         for(int i = 0; i != options.size(); i++){
             box.addItem(options.get(i));
         }
