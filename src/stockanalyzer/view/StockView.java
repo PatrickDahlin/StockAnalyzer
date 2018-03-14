@@ -185,15 +185,15 @@ public class StockView {
 
     private void defaultOptions() {
 
-        ReadOptions reader = new ReadOptions();
-
         ArrayList<String> options = new ArrayList<String>();
 
         options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
         itemAdder(datSerBox, options);
         options.clear();
 
-        itemAdder(smblBox, reader.getOptions("symbols"));
+        options.add("MSFT");
+        itemAdder(smblBox, options);
+        options.clear();
 
         options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
         itemAdder(timIntBox, options);
@@ -226,6 +226,7 @@ public class StockView {
             //Depending on choice
             switch (timSerBox.getSelectedIndex()) {
                 case 0:
+                    defaultOptions();
                     break;
                 case 1:
                     break;
