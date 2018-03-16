@@ -185,15 +185,15 @@ public class StockView {
 
     private void defaultOptions() {
 
-        ReadOptions reader = new ReadOptions();
-
         ArrayList<String> options = new ArrayList<String>();
 
         options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
         itemAdder(datSerBox, options);
         options.clear();
 
-        itemAdder(smblBox, reader.getOptions("symbols"));
+        options.add("MSFT");
+        itemAdder(smblBox, options);
+        options.clear();
 
         options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
         itemAdder(timIntBox, options);
@@ -212,6 +212,12 @@ public class StockView {
             return;
         }
 
+        //Makes sure box isn't disabled
+        box.enable();
+
+        //Clears box
+        box.removeAllItems();
+
         //Method for adding items to JComboBox
         for(int i = 0; i != options.size(); i++){
             box.addItem(options.get(i));
@@ -223,21 +229,60 @@ public class StockView {
         //ActionListener for time series
         timSerBox.addActionListener(evt -> {
 
+            ArrayList<String> options = new ArrayList<String>();
+
             //Depending on choice
             switch (timSerBox.getSelectedIndex()) {
                 case 0:
+                    defaultOptions();
                     break;
                 case 1:
+                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 case 2:
+                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume", "daily adjusted", "split/dividend events"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 case 3:
+                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly volume"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 case 4:
+                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly volume", "weekly dividend"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 case 5:
+                    options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly volume"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 case 6:
+                    options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly adjusted close", "monthly volume", "monthly dividend"));
+                    itemAdder(datSerBox, options);
+                    options.clear();
+
+                    //Disables box
+                    disableBox(timIntBox);
                     break;
                 default:
                     break;
@@ -247,6 +292,15 @@ public class StockView {
 
 	    //ActionListener for query Button
         queryButton.addActionListener(evt -> System.out.println("You touched it!"));
+
+    }
+
+    private void disableBox(JComboBox box){
+
+	    //Method to disable box
+	    box.removeAllItems();
+	    box.addItem("DISABLED");
+	    box.disable();
 
     }
 
