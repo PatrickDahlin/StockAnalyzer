@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.Option;
 
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.OHLCChart;
 import org.knowm.xchart.OHLCChartBuilder;
 import org.knowm.xchart.OHLCSeries.OHLCSeriesRenderStyle;
@@ -41,7 +43,7 @@ public class StockView {
     private JButton queryButton;
 	private JTextArea textField;
 	
-	private OHLCChart chart;
+	private XYChart chart;
 	private JPanel chartPanel;
 
 	public StockView(StockController contrlr)
@@ -180,25 +182,22 @@ public class StockView {
         stockLayout.setConstraints(queryButton, cons);
         compPanel.add(queryButton);
 
-        //adds temp label to 2nd grid where graph is supposed to be
-        //stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
-        //@TODO Add the actual graph and remove temp FILLER
 
+        chart = new XYChartBuilder().title("Stock chart").width(100).height(100).xAxisTitle("Time").yAxisTitle("Value").build();
 
-        chart = new OHLCChartBuilder().title("Stock chart").width(100).height(100).xAxisTitle("Time").yAxisTitle("Value").build();
-        
         // Need these to set the types of the series correctly, just empty data until update
         ArrayList<Date> a = new ArrayList<Date>(1); a.add(new Date()); // We need 1 element for chart not to crash :/
         ArrayList<Float> b = new ArrayList<Float>(1); b.add(0f);
-        chart.addSeries("Stock value", a, b, b, b, b).setOhlcSeriesRenderStyle(OHLCSeriesRenderStyle.HiLo);
+        chart.addSeries("Stock value", a, b);
         
         chart.getStyler().setLegendPosition(LegendPosition.InsideNE); // Puts legend inside chart for smaller padding
         chart.getStyler().setChartBackgroundColor(new Color(0,0,0,0));
         chart.getStyler().setLegendLayout(LegendLayout.Horizontal);
         chart.getStyler().setToolTipsEnabled(true);
         chart.getStyler().setDecimalPattern("##########.##");
+        chart.getStyler().setDatePattern("yyyy-MM-dd HH:mm:ss");
         
-        chartPanel = new XChartPanel<OHLCChart>(chart);
+        chartPanel = new XChartPanel<XYChart>(chart);
         stockView.add(chartPanel);
         
         //Adds JPanel & components to 3rd grid
@@ -227,7 +226,7 @@ public class StockView {
     	ArrayList<Float> graphData = new ArrayList<Float>();
     	ArrayList<Date> graphData2 = new ArrayList<Date>();
     	
-    	DateFormat df = new SimpleDateFormat("y-M-d H:m:s");
+    	DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
     	text.append("========== Listing data: ");
     	text.append(dataSeries);
@@ -258,10 +257,9 @@ public class StockView {
     	}
     	textField.setText(text.toString());
     
-    	// @TODO graph stuffs here
-    	//chart.addSeries("a", graphData, graphData2);
-    	//chart.updateXYSeries("Stock value", graphData2, graphData, null);
-    	chart.updateOHLCSeries("Stock value", graphData2, graphData, graphData, graphData, graphData);
+    	chart.removeSeries("Stock value");
+    	chart.addSeries("Stock value", graphData2, graphData);
+    	
     	chartPanel.revalidate();
     	chartPanel.repaint();
     }

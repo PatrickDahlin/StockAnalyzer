@@ -25,7 +25,7 @@ public class StockController {
 		stockView = new StockView(this);
 		
 		doAPIRequest(new APICallParams(TimeSeries.TIME_SERIES_INTRADAY,
-				Interval.OneMin,
+				Interval.FifteenMin,
 				"MSFT",
 				DataType.JSON,
 				OutputSize.FULL,

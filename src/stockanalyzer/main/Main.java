@@ -36,7 +36,7 @@ public class Main {
 	public Main()
 	{
 		// @Cleanup this whole constructor will be removed, only for testing output from stockmodel atm
-		JSONObject myjson = StockAPI.getRequest(new APICallParams(TimeSeries.TIME_SERIES_INTRADAY,
+		JSONObject myjson = StockAPI.getRequest(new APICallParams(TimeSeries.TIME_SERIES_DAILY_ADJUSTED,
 																	Interval.OneMin,
 																	"MSFT",
 																	DataType.JSON,
