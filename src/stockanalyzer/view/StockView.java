@@ -281,7 +281,7 @@ public class StockView {
         itemAdder(datSerBox, options);
         options.clear();
 
-        options.add("MSFT");
+        options.addAll(Arrays.asList("MSFT", "TSLA", "GOOGL", "AABA", "ULTA"));
         itemAdder(smblBox, options);
         options.clear();
 
