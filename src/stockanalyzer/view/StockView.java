@@ -52,11 +52,8 @@ public class StockView {
 
 		BuildWindow();
 
-        ArrayList<String> options = new ArrayList<String>();
 
-
-
-        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+        ArrayList<String> options = new ArrayList<String>(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
                 "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
         itemAdder(timSerBox, options);
         options.clear();
@@ -266,9 +263,7 @@ public class StockView {
 
     private void defaultOptions() {
 
-        ArrayList<String> options = new ArrayList<String>();
-
-        options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
+        ArrayList<String> options = new ArrayList<String>(Arrays.asList("open", "high", "low", "close", "volume"));
         itemAdder(datSerBox, options);
         options.clear();
 
@@ -330,7 +325,7 @@ public class StockView {
                     disableBox(timIntBox);
                     break;
                 case 2:
-                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume", "daily adjusted", "split/dividend events"));
+                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily adjusted close", "daily volume", "daily dividend amount", "daily split coefficient"));
                     itemAdder(datSerBox, options);
                     options.clear();
 
@@ -351,7 +346,7 @@ public class StockView {
                     disableBox(outSizBox);
                     break;
                 case 4:
-                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly volume", "weekly dividend"));
+                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly dividend"));
                     itemAdder(datSerBox, options);
                     options.clear();
 
@@ -384,37 +379,79 @@ public class StockView {
         });
 
 	    //ActionListener for query Button
-        queryButton.addActionListener(evt -> {
-            //APICallParams(TimeSeries timeSeries, Interval interval, String symbol, DataType type, OutputSize output, String APIKey
-            createParameters();
-        });
+        queryButton.addActionListener(evt -> createParameters());
 
     }
 
     private void createParameters() {
 
-	    //"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
-        //"TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"
+        APICallParams.TimeSeries timeSerie;
+        APICallParams.Interval interval;
+        APICallParams.OutputSize size;
 
         switch (timSerBox.getSelectedItem().toString()) {
             case "TIME_SERIES_INTRADAY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
                 break;
             case "TIME_SERIES_DAILY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY;
                 break;
             case "TIME_SERIES_DAILY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY_ADJUSTED;
                 break;
             case "TIME_SERIES_WEEKLY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY;
                 break;
             case "TIME_SERIES_WEEKLY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
                 break;
             case "TIME_SERIES_MONTHLY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_MONTHLY;
                 break;
             case "TIME_SERIES_MONTHLY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
                 break;
             default:
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
                 break;
         }
 
+        switch (timIntBox.getSelectedItem().toString()) {
+            case "1min":
+                interval = APICallParams.Interval.OneMin;
+                break;
+            case "5min":
+                interval = APICallParams.Interval.FiveMin;
+                break;
+            case "15min":
+                interval = APICallParams.Interval.FifteenMin;
+                break;
+            case "30min":
+                interval = APICallParams.Interval.ThirtyMin;
+                break;
+            case "60min":
+                interval = APICallParams.Interval.SixtyMin;
+                break;
+            default:
+                interval = APICallParams.Interval.OneMin;
+                break;
+        }
+
+        switch (outSizBox.getSelectedItem().toString()){
+            case "compact":
+                size = APICallParams.OutputSize.COMPACT;
+                break;
+            case "full":
+                size = APICallParams.OutputSize.FULL;
+                break;
+            default:
+                size = null;
+                break;
+        }
+
+        APICallParams params = new APICallParams(timeSerie, interval, smblBox.getSelectedItem().toString(), APICallParams.DataType.JSON, size, "XVXEHHDH9BOTXCBQ");
+
+        controller.doAPIRequest(params);
 
     }
 
