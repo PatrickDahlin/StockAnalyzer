@@ -214,6 +214,7 @@ public class StockView {
         chart.getStyler().setToolTipsEnabled(true);
         chart.getStyler().setDecimalPattern("##########.##");
         chart.getStyler().setDatePattern("yyyy-MM-dd HH:mm:ss");
+        chart.getStyler().setXAxisLabelRotation(75);
         
         chartPanel = new XChartPanel<XYChart>(chart);
         rightP.add(chartPanel);
