@@ -2,9 +2,21 @@ package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
 import stockanalyzer.model.APICallParams;
+import javax.swing.border.EmptyBorder;
+import stockanalyzer.model.StockModel;
+import stockanalyzer.model.StockModel.StockEntry;
+import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.html.Option;
+
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
+import org.knowm.xchart.style.Styler.LegendPosition;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +31,9 @@ public class StockView {
 	private JComboBox<String> outSizBox;
     private JButton queryButton;
 	private JTextArea textField;
+	
+	private XYChart chart;
+	private JPanel chartPanel;
 
 	public StockView(StockController contrlr)
 	{
@@ -157,9 +172,19 @@ public class StockView {
         compPanel.add(queryButton);
 
         //adds temp label to 2nd grid where graph is supposed to be
-        stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
+        //stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
         //@TODO Add the actual graph and remove temp FILLER
-
+        
+        // Width & Height don't seem to affect size in swing
+        chart = new XYChartBuilder().width(100).height(100).title("Stock Chart").xAxisTitle("Time").yAxisTitle("Value").build();
+        chart.addSeries("Stock value", new float[] {0});
+        chart.getStyler().setLegendPosition(LegendPosition.InsideNE); // Puts legend inside chart for smaller padding
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Area);
+        chart.getStyler().setChartBackgroundColor(new Color(0,0,0,0));
+        
+        chartPanel = new XChartPanel<XYChart>(chart);
+        stockView.add(chartPanel);
+        
         //Adds JPanel & components to 3rd grid
         JPanel textPanel = new JPanel();
         textPanel.setBorder(new EmptyBorder(0,15,15,15));
@@ -176,12 +201,43 @@ public class StockView {
         stockView.setLocationRelativeTo(null);
 	}
 
-    public void textFieldData() {
-        //@TODO Do stuff here that makes TextFieldChange change
-    }
+    public void setModelData(StockModel model) {
 
-    public void graphData() {
-	    //@TODO Do stuff here that makes non-existing Graph change
+    	
+    	StringBuilder text = new StringBuilder();
+    	String dataSeries = (String)datSerBox.getSelectedItem();
+    	
+    	ArrayList<StockEntry> v = model.getData();
+    	ArrayList<Float> graphData = new ArrayList<Float>();
+    	ArrayList<Float> graphData2 = new ArrayList<Float>();
+    	
+    	text.append("========== Listing data: ");
+    	text.append(dataSeries);
+    	text.append(" ==========");
+    	float index = 0;
+    	for(StockEntry entry : v)
+    	{
+    		for(TimedValue val : entry.values)
+    		{
+    			if(val.title.contains(dataSeries))
+    			{
+    				text.append("\n");
+    				text.append("Date: ");
+    				text.append(entry.time);
+    				text.append(": ");
+    				text.append(val.value);
+    				graphData.add(val.value);
+    				graphData2.add(index++);
+    			}
+    		}
+    	}
+    	textField.setText(text.toString());
+    
+    	// @TODO graph stuffs here
+    	//chart.addSeries("a", graphData, graphData2);
+    	chart.updateXYSeries("Stock value", graphData2, graphData, null);
+    	chartPanel.revalidate();
+    	chartPanel.repaint();
     }
 
     private void defaultOptions() {
