@@ -203,7 +203,6 @@ public class StockView {
         options.addAll(Arrays.asList("compact", "full"));
         itemAdder(outSizBox, options);
         options.clear();
-        outSizBox.setEnabled(true);
 
     }
 
@@ -215,7 +214,7 @@ public class StockView {
         }
 
         //Makes sure box isn't disabled
-        box.enable();
+        box.setEnabled(true);
 
         //Clears box
         box.removeAllItems();
@@ -246,7 +245,6 @@ public class StockView {
                     options.addAll(Arrays.asList("compact", "full"));
                     itemAdder(outSizBox, options);
                     options.clear();
-                    outSizBox.setEnabled(true);
 
                     //Disables box
                     disableBox(timIntBox);
@@ -259,7 +257,6 @@ public class StockView {
                     options.addAll(Arrays.asList("compact", "full"));
                     itemAdder(outSizBox, options);
                     options.clear();
-                    outSizBox.setEnabled(true);
 
                     //Disables box
                     disableBox(timIntBox);
@@ -346,7 +343,7 @@ public class StockView {
 	    //Method to disable box
 	    box.removeAllItems();
 	    box.addItem("DISABLED");
-	    box.disable();
+        box.setEnabled(false);
 
     }
 
