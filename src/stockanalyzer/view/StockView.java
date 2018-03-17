@@ -301,7 +301,7 @@ public class StockView {
                     disableBox(timIntBox);
                     break;
                 case 2:
-                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume", "daily adjusted", "split/dividend events"));
+                    options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily adjusted close", "daily volume", "daily dividend amount", "daily split coefficient"));
                     itemAdder(datSerBox, options);
                     options.clear();
 
@@ -322,7 +322,7 @@ public class StockView {
                     disableBox(outSizBox);
                     break;
                 case 4:
-                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly volume", "weekly dividend"));
+                    options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly dividend"));
                     itemAdder(datSerBox, options);
                     options.clear();
 
