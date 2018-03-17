@@ -1,6 +1,8 @@
 package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
+import stockanalyzer.model.APICallParams;
+import javax.swing.border.EmptyBorder;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
@@ -189,6 +191,7 @@ public class StockView {
         textPanel.setLayout(new GridLayout(1,1));
         stockView.add(textPanel);
         textField = new JTextArea();
+        textField.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textField);
         textPanel.add(scrollPane);
 
@@ -267,7 +270,7 @@ public class StockView {
         }
 
         //Makes sure box isn't disabled
-        box.enable();
+        box.setEnabled(true);
 
         //Clears box
         box.removeAllItems();
@@ -295,12 +298,20 @@ public class StockView {
                     itemAdder(datSerBox, options);
                     options.clear();
 
+                    options.addAll(Arrays.asList("compact", "full"));
+                    itemAdder(outSizBox, options);
+                    options.clear();
+
                     //Disables box
                     disableBox(timIntBox);
                     break;
                 case 2:
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume", "daily adjusted", "split/dividend events"));
                     itemAdder(datSerBox, options);
+                    options.clear();
+
+                    options.addAll(Arrays.asList("compact", "full"));
+                    itemAdder(outSizBox, options);
                     options.clear();
 
                     //Disables box
@@ -313,6 +324,7 @@ public class StockView {
 
                     //Disables box
                     disableBox(timIntBox);
+                    disableBox(outSizBox);
                     break;
                 case 4:
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly volume", "weekly dividend"));
@@ -320,6 +332,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 case 5:
@@ -328,6 +341,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 case 6:
@@ -336,6 +350,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 default:
@@ -345,7 +360,37 @@ public class StockView {
         });
 
 	    //ActionListener for query Button
-        queryButton.addActionListener(evt -> System.out.println("You touched it!"));
+        queryButton.addActionListener(evt -> {
+            //APICallParams(TimeSeries timeSeries, Interval interval, String symbol, DataType type, OutputSize output, String APIKey
+            createParameters();
+        });
+
+    }
+
+    private void createParameters() {
+
+	    //"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+        //"TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"
+
+        switch (timSerBox.getSelectedItem().toString()) {
+            case "TIME_SERIES_INTRADAY":
+                break;
+            case "TIME_SERIES_DAILY":
+                break;
+            case "TIME_SERIES_DAILY_ADJUSTED":
+                break;
+            case "TIME_SERIES_WEEKLY":
+                break;
+            case "TIME_SERIES_WEEKLY_ADJUSTED":
+                break;
+            case "TIME_SERIES_MONTHLY":
+                break;
+            case "TIME_SERIES_MONTHLY_ADJUSTED":
+                break;
+            default:
+                break;
+        }
+
 
     }
 
@@ -354,7 +399,7 @@ public class StockView {
 	    //Method to disable box
 	    box.removeAllItems();
 	    box.addItem("DISABLED");
-	    box.disable();
+        box.setEnabled(false);
 
     }
 
