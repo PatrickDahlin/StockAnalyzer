@@ -1,10 +1,10 @@
 package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
+import stockanalyzer.model.APICallParams;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,6 +166,7 @@ public class StockView {
         textPanel.setLayout(new GridLayout(1,1));
         stockView.add(textPanel);
         textField = new JTextArea();
+        textField.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textField);
         textPanel.add(scrollPane);
 
@@ -291,7 +292,37 @@ public class StockView {
         });
 
 	    //ActionListener for query Button
-        queryButton.addActionListener(evt -> System.out.println("You touched it!"));
+        queryButton.addActionListener(evt -> {
+            //APICallParams(TimeSeries timeSeries, Interval interval, String symbol, DataType type, OutputSize output, String APIKey
+            createParameters();
+        });
+
+    }
+
+    private void createParameters() {
+
+	    //"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+        //"TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"
+
+        switch (timSerBox.getSelectedItem().toString()) {
+            case "TIME_SERIES_INTRADAY":
+                break;
+            case "TIME_SERIES_DAILY":
+                break;
+            case "TIME_SERIES_DAILY_ADJUSTED":
+                break;
+            case "TIME_SERIES_WEEKLY":
+                break;
+            case "TIME_SERIES_WEEKLY_ADJUSTED":
+                break;
+            case "TIME_SERIES_MONTHLY":
+                break;
+            case "TIME_SERIES_MONTHLY_ADJUSTED":
+                break;
+            default:
+                break;
+        }
+
 
     }
 
