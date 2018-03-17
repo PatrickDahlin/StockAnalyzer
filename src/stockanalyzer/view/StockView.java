@@ -41,11 +41,8 @@ public class StockView {
 
 		BuildWindow();
 
-        ArrayList<String> options = new ArrayList<String>();
 
-
-
-        options.addAll(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
+        ArrayList<String> options = new ArrayList<String>(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
                 "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
         itemAdder(timSerBox, options);
         options.clear();
@@ -242,9 +239,7 @@ public class StockView {
 
     private void defaultOptions() {
 
-        ArrayList<String> options = new ArrayList<String>();
-
-        options.addAll(Arrays.asList("open", "high", "low", "close", "volume"));
+        ArrayList<String> options = new ArrayList<String>(Arrays.asList("open", "high", "low", "close", "volume"));
         itemAdder(datSerBox, options);
         options.clear();
 
@@ -360,9 +355,7 @@ public class StockView {
         });
 
 	    //ActionListener for query Button
-        queryButton.addActionListener(evt -> {
-            createParameters();
-        });
+        queryButton.addActionListener(evt -> createParameters());
 
     }
 
@@ -433,6 +426,8 @@ public class StockView {
         }
 
         APICallParams params = new APICallParams(timeSerie, interval, smblBox.getSelectedItem().toString(), APICallParams.DataType.JSON, size, "XVXEHHDH9BOTXCBQ");
+
+        controller.doAPIRequest(params);
 
     }
 
