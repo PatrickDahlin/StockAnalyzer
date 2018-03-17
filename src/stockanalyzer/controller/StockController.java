@@ -3,6 +3,10 @@ package stockanalyzer.controller;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.StockModel;
+import stockanalyzer.model.APICallParams.DataType;
+import stockanalyzer.model.APICallParams.Interval;
+import stockanalyzer.model.APICallParams.OutputSize;
+import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.view.StockView;
 
 public class StockController {
@@ -36,9 +40,8 @@ public class StockController {
 			return;
 		}
 		
-		// Give StockView the model data
-		// I'd give the view a String of the data for the data-textbox
-		// Aswell as a float[] for the graph
+		stockView.setModelData(stockModel);
+		
 	}
 	
 }

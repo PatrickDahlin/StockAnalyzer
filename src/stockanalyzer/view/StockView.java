@@ -1,6 +1,9 @@
 package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
+import stockanalyzer.model.StockModel;
+import stockanalyzer.model.StockModel.StockEntry;
+import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -175,12 +178,37 @@ public class StockView {
         stockView.setLocationRelativeTo(null);
 	}
 
-    public void textFieldData() {
-        //@TODO Do stuff here that makes TextFieldChange change
-    }
+    public void setModelData(StockModel model) {
 
-    public void graphData() {
-	    //@TODO Do stuff here that makes non-existing Graph change
+    	
+    	StringBuilder text = new StringBuilder();
+    	String dataSeries = (String)datSerBox.getSelectedItem();
+    	
+    	ArrayList<StockEntry> v = model.getData();
+    	ArrayList<Float> graphData = new ArrayList<Float>();
+    	
+    	text.append("========== Listing data: ");
+    	text.append(dataSeries);
+    	text.append(" ==========");
+    	
+    	for(StockEntry entry : v)
+    	{
+    		for(TimedValue val : entry.values)
+    		{
+    			if(val.title.contains(dataSeries))
+    			{
+    				text.append("\n");
+    				text.append("Date: ");
+    				text.append(entry.time);
+    				text.append(": ");
+    				text.append(val.value);
+    				graphData.add(val.value);
+    			}
+    		}
+    	}
+    	textField.setText(text.toString());
+    
+    	// @TODO graph stuffs here
     }
 
     private void defaultOptions() {
