@@ -203,6 +203,7 @@ public class StockView {
         options.addAll(Arrays.asList("compact", "full"));
         itemAdder(outSizBox, options);
         options.clear();
+        outSizBox.setEnabled(true);
 
     }
 
@@ -242,6 +243,11 @@ public class StockView {
                     itemAdder(datSerBox, options);
                     options.clear();
 
+                    options.addAll(Arrays.asList("compact", "full"));
+                    itemAdder(outSizBox, options);
+                    options.clear();
+                    outSizBox.setEnabled(true);
+
                     //Disables box
                     disableBox(timIntBox);
                     break;
@@ -249,6 +255,11 @@ public class StockView {
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume", "daily adjusted", "split/dividend events"));
                     itemAdder(datSerBox, options);
                     options.clear();
+
+                    options.addAll(Arrays.asList("compact", "full"));
+                    itemAdder(outSizBox, options);
+                    options.clear();
+                    outSizBox.setEnabled(true);
 
                     //Disables box
                     disableBox(timIntBox);
@@ -260,6 +271,7 @@ public class StockView {
 
                     //Disables box
                     disableBox(timIntBox);
+                    disableBox(outSizBox);
                     break;
                 case 4:
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly volume", "weekly dividend"));
@@ -267,6 +279,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 case 5:
@@ -275,6 +288,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 case 6:
@@ -283,6 +297,7 @@ public class StockView {
                     options.clear();
 
                     //Disables box
+                    disableBox(outSizBox);
                     disableBox(timIntBox);
                     break;
                 default:
