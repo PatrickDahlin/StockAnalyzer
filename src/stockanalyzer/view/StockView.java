@@ -361,7 +361,6 @@ public class StockView {
 
 	    //ActionListener for query Button
         queryButton.addActionListener(evt -> {
-            //APICallParams(TimeSeries timeSeries, Interval interval, String symbol, DataType type, OutputSize output, String APIKey
             createParameters();
         });
 
@@ -369,28 +368,71 @@ public class StockView {
 
     private void createParameters() {
 
-	    //"TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
-        //"TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"
+        APICallParams.TimeSeries timeSerie;
+        APICallParams.Interval interval;
+        APICallParams.OutputSize size;
 
         switch (timSerBox.getSelectedItem().toString()) {
             case "TIME_SERIES_INTRADAY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
                 break;
             case "TIME_SERIES_DAILY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY;
                 break;
             case "TIME_SERIES_DAILY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY_ADJUSTED;
                 break;
             case "TIME_SERIES_WEEKLY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY;
                 break;
             case "TIME_SERIES_WEEKLY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
                 break;
             case "TIME_SERIES_MONTHLY":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_MONTHLY;
                 break;
             case "TIME_SERIES_MONTHLY_ADJUSTED":
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
                 break;
             default:
+                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
                 break;
         }
 
+        switch (timIntBox.getSelectedItem().toString()) {
+            case "1min":
+                interval = APICallParams.Interval.OneMin;
+                break;
+            case "5min":
+                interval = APICallParams.Interval.FiveMin;
+                break;
+            case "15min":
+                interval = APICallParams.Interval.FifteenMin;
+                break;
+            case "30min":
+                interval = APICallParams.Interval.ThirtyMin;
+                break;
+            case "60min":
+                interval = APICallParams.Interval.SixtyMin;
+                break;
+            default:
+                interval = APICallParams.Interval.OneMin;
+                break;
+        }
+
+        switch (outSizBox.getSelectedItem().toString()){
+            case "compact":
+                size = APICallParams.OutputSize.COMPACT;
+                break;
+            case "full":
+                size = APICallParams.OutputSize.FULL;
+                break;
+            default:
+                size = null;
+                break;
+        }
+
+        APICallParams params = new APICallParams(timeSerie, interval, smblBox.getSelectedItem().toString(), APICallParams.DataType.JSON, size, "XVXEHHDH9BOTXCBQ");
 
     }
 
