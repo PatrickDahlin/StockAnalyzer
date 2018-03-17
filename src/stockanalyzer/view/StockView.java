@@ -68,13 +68,34 @@ public class StockView {
         JFrame stockView = new JFrame("StockView");
         stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         stockView.setResizable(false); // removes ability to resize the window
+        
 
+        GridBagLayout g = new GridBagLayout();
+        GridBagConstraints vcons = new GridBagConstraints();
+        vcons.fill = GridBagConstraints.BOTH;
+        stockView.setLayout(g);
+        
+        JPanel leftP = new JPanel();
+        leftP.setPreferredSize(new Dimension(400,500));
+        stockView.add(leftP);
+        vcons.gridx = 0;
+        vcons.gridy = 0;
+        vcons.weightx = 1.0f;
+        vcons.weighty = 1.0f;
+        g.setConstraints(leftP, vcons);
+        
+        JPanel rightP = new JPanel();
+        stockView.add(rightP);
+        vcons.weightx = 1.0f;
+        vcons.gridx = 1;
+        g.setConstraints(rightP, vcons);
+        
         //Sets layout for JFrame
-        stockView.setLayout(new GridLayout(2,2));
+        leftP.setLayout(new GridLayout(2,1));
 
         //Created and adds JPanel to frame
         JPanel compPanel = new JPanel();
-        stockView.add(compPanel);
+        leftP.add(compPanel);
         compPanel.setBorder(new EmptyBorder(15,15,15,15));
 
         //Layout Settings
@@ -180,7 +201,7 @@ public class StockView {
         compPanel.add(queryButton);
 
 
-        chart = new XYChartBuilder().title("Stock chart").width(100).height(100).xAxisTitle("Time").yAxisTitle("Value").build();
+        chart = new XYChartBuilder().title("Stock chart").width(600).height(500).xAxisTitle("Time").yAxisTitle("Value").build();
 
         // Need these to set the types of the series correctly, just empty data until update
         ArrayList<Date> a = new ArrayList<Date>(1); a.add(new Date()); // We need 1 element for chart not to crash :/
@@ -195,13 +216,13 @@ public class StockView {
         chart.getStyler().setDatePattern("yyyy-MM-dd HH:mm:ss");
         
         chartPanel = new XChartPanel<XYChart>(chart);
-        stockView.add(chartPanel);
+        rightP.add(chartPanel);
         
         //Adds JPanel & components to 3rd grid
         JPanel textPanel = new JPanel();
         textPanel.setBorder(new EmptyBorder(0,15,15,15));
         textPanel.setLayout(new GridLayout(1,1));
-        stockView.add(textPanel);
+        leftP.add(textPanel);
         textField = new JTextArea();
         textField.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textField);
