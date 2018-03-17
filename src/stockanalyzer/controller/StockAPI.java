@@ -59,8 +59,8 @@ public class StockAPI {
 			break;
 		}
 		
-		System.out.println("final request url:");
-		System.out.println(url_str.toString());
+		//System.out.println("final request url:");
+		//System.out.println(url_str.toString());
 		
 		String response = "";
 		try {

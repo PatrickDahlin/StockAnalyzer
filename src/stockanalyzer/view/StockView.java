@@ -217,22 +217,24 @@ public class StockView {
 
     	
     	StringBuilder text = new StringBuilder();
-    	String dataSeries = (String)datSerBox.getSelectedItem();
     	
     	ArrayList<StockEntry> v = model.getData();
     	ArrayList<Float> graphData = new ArrayList<Float>();
     	ArrayList<Date> graphData2 = new ArrayList<Date>();
     	
-    	DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+    	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 
     	text.append("========== Listing data: ");
-    	text.append(dataSeries);
+    	text.append(datSerBox.getSelectedItem().toString());
     	text.append(" ==========");
     	for(StockEntry entry : v)
     	{
     		for(TimedValue val : entry.values)
     		{
-    			if(val.title.contains(dataSeries))
+    			// We're checking the first character in the title(the index) against the index in the combobox
+    			// API **should** always return same index for same value and our combo has items in the correct order
+    			if(Integer.parseInt(val.title.substring(0, 1)) == (datSerBox.getSelectedIndex()+1))
     			{
     				text.append("\n");
     				text.append("Date: ");
@@ -243,20 +245,32 @@ public class StockView {
     				
     				try {
     					Date d = df.parse(entry.time);
-    					
 						graphData2.add(d);
 					} catch (ParseException e) {
-						
-						e.printStackTrace();
+						try {
+							Date d = df2.parse(entry.time);
+							graphData2.add(d);
+						}catch(ParseException e2)
+						{
+							e2.printStackTrace();
+							System.out.println("Failed to parse date time");
+							return;
+						}
 					}
     			}
     		}
     	}
     	textField.setText(text.toString());
-    
+    	textField.setCaretPosition(0);
+    	
+    	// Chart needs to have data to properly render, otherwise it throws an error
+    	if(graphData.size() == 0)
+    			graphData.add(0f);
+    	
     	chart.removeSeries("Stock value");
     	chart.addSeries("Stock value", graphData2, graphData);
     	
+    	// Repaint the chart
     	chartPanel.revalidate();
     	chartPanel.repaint();
     }
