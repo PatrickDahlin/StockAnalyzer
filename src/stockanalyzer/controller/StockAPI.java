@@ -36,6 +36,7 @@ public class StockAPI {
 			break;
 		case TIME_SERIES_DAILY_ADJUSTED:
 		case TIME_SERIES_DAILY:
+		
 			url_str.append("function=");
 			url_str.append(params.getTimeSeries().toString());
 			url_str.append("&symbol=");
@@ -87,44 +88,4 @@ public class StockAPI {
 		
 		return new JSONObject(response);
 	}
-/*
-
- String response = "";
-		try {
-			URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=15min&outputsize=full&apikey=XVXEHHDH9BOTXCBQ");
-		
-			URLConnection con = (URLConnection)url.openConnection();
-			
-			BufferedReader br =
-				new BufferedReader(
-					new InputStreamReader(con.getInputStream()));
-
-			String input;
-
-			while ((input = br.readLine()) != null)
-				response += input + "\n";
-			
-			br.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		JSONObject myjson = new JSONObject(response);
-		
-		StockModel model;
-		
-		try {
-			model = new StockModel(myjson);
-		} catch (Exception e) {
-			e.printStackTrace(); return;
-		}
-
-		ArrayList<StockValue> v = model.getData();
-		for(StockValue tmp : v)
-		{
-			System.out.println(tmp.time + " : " + tmp.high);
-		}
- 
-*/
 }

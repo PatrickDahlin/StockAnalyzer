@@ -24,12 +24,6 @@ public class StockController {
 		stockModel = new StockModel(null); // Create empty StockModel
 		stockView = new StockView(this);
 		
-		doAPIRequest(new APICallParams(TimeSeries.TIME_SERIES_INTRADAY,
-				Interval.FifteenMin,
-				"MSFT",
-				DataType.JSON,
-				OutputSize.FULL,
-				StockController.VANTAGE_API_KEY));
 	}
 	
 	public void doAPIRequest(APICallParams params)

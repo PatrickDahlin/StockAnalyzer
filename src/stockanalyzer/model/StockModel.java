@@ -3,6 +3,7 @@ package stockanalyzer.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
 import stockanalyzer.json.JSONObject;
 
@@ -91,39 +92,42 @@ public class StockModel {
 		//		...
 		//	}
 		//
-		
+
 		// Get the data, we don't need metadata
-		if(!root.keySet().iterator().hasNext()) throw new Exception("Malformed JSON Object");
 		
-		String data_key = root.keySet().iterator().next(); // Gets the Data String
+		Iterator<String> i = root.keys();		
+		String data_key = i.next(); // Gets the Data String
+		// In some cases the metadata is in the beginning......
+		while(i.hasNext() && data_key.equals("Meta Data"))
+		{
+			data_key = i.next();
+		}
+
 		
-		JSONObject tmp = root.optJSONObject(data_key);
+		JSONObject tmp = root.getJSONObject(data_key);
 		if(tmp == null) throw new Exception("Malformed JSON Object");
 		// Now we have the JSON-Object for the Data container
+		
 		
 		for(String time : tmp.keySet())
 		{
 			// For each Timestamp
-			JSONObject child = tmp.optJSONObject(time);
-			if(child == null || child.keySet() == null) break;
+			JSONObject child = tmp.getJSONObject(time);
+			
+			if(child == null) break;
 			
 			//System.out.println("Time: "+time);
 			
 			// Make a stockvalue
 			StockEntry stockVal = new StockEntry();
 			stockVal.time = time;
-			
+
 			// And loop it's children to fill in it's values
 			for(String values : child.keySet())
 			{
 				//System.out.println("\t" + values + " : " + child.get(values));
 				String value = child.getString(values);
 				stockVal.values.add(new TimedValue(values, Float.parseFloat(value)));
-				/*if(values.contains("high"))  stockVal.high = Float.parseFloat(value);
-				if(values.contains("low"))   stockVal.low = Float.parseFloat(value);
-				if(values.contains("open"))  stockVal.open = Float.parseFloat(value);
-				if(values.contains("close")) stockVal.close = Float.parseFloat(value);
-				if(values.contains("volume"))stockVal.volume = Long.parseLong(value);*/
 			}
 			data.add(stockVal);
 		}
