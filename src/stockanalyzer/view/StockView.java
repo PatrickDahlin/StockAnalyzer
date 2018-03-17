@@ -11,15 +11,24 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.Option;
 
+import org.knowm.xchart.OHLCChart;
+import org.knowm.xchart.OHLCChartBuilder;
+import org.knowm.xchart.OHLCSeries.OHLCSeriesRenderStyle;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
+import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class StockView {
 	
@@ -32,7 +41,7 @@ public class StockView {
     private JButton queryButton;
 	private JTextArea textField;
 	
-	private XYChart chart;
+	private OHLCChart chart;
 	private JPanel chartPanel;
 
 	public StockView(StockController contrlr)
@@ -174,15 +183,22 @@ public class StockView {
         //adds temp label to 2nd grid where graph is supposed to be
         //stockView.add(new JLabel("This is where the graph is supposed to be")); //Patrick, få int herpes, fillern e bara temporär tills vi lagar grafen :DDDD
         //@TODO Add the actual graph and remove temp FILLER
+
+
+        chart = new OHLCChartBuilder().title("Stock chart").width(100).height(100).xAxisTitle("Time").yAxisTitle("Value").build();
         
-        // Width & Height don't seem to affect size in swing
-        chart = new XYChartBuilder().width(100).height(100).title("Stock Chart").xAxisTitle("Time").yAxisTitle("Value").build();
-        chart.addSeries("Stock value", new float[] {0});
+        // Need these to set the types of the series correctly, just empty data until update
+        ArrayList<Date> a = new ArrayList<Date>(1); a.add(new Date()); // We need 1 element for chart not to crash :/
+        ArrayList<Float> b = new ArrayList<Float>(1); b.add(0f);
+        chart.addSeries("Stock value", a, b, b, b, b).setOhlcSeriesRenderStyle(OHLCSeriesRenderStyle.HiLo);
+        
         chart.getStyler().setLegendPosition(LegendPosition.InsideNE); // Puts legend inside chart for smaller padding
-        chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Area);
         chart.getStyler().setChartBackgroundColor(new Color(0,0,0,0));
+        chart.getStyler().setLegendLayout(LegendLayout.Horizontal);
+        chart.getStyler().setToolTipsEnabled(true);
+        chart.getStyler().setDecimalPattern("##########.##");
         
-        chartPanel = new XChartPanel<XYChart>(chart);
+        chartPanel = new XChartPanel<OHLCChart>(chart);
         stockView.add(chartPanel);
         
         //Adds JPanel & components to 3rd grid
@@ -209,12 +225,13 @@ public class StockView {
     	
     	ArrayList<StockEntry> v = model.getData();
     	ArrayList<Float> graphData = new ArrayList<Float>();
-    	ArrayList<Float> graphData2 = new ArrayList<Float>();
+    	ArrayList<Date> graphData2 = new ArrayList<Date>();
     	
+    	DateFormat df = new SimpleDateFormat("y-M-d H:m:s");
+
     	text.append("========== Listing data: ");
     	text.append(dataSeries);
     	text.append(" ==========");
-    	float index = 0;
     	for(StockEntry entry : v)
     	{
     		for(TimedValue val : entry.values)
@@ -227,7 +244,15 @@ public class StockView {
     				text.append(": ");
     				text.append(val.value);
     				graphData.add(val.value);
-    				graphData2.add(index++);
+    				
+    				try {
+    					Date d = df.parse(entry.time);
+    					
+						graphData2.add(d);
+					} catch (ParseException e) {
+						
+						e.printStackTrace();
+					}
     			}
     		}
     	}
@@ -235,7 +260,8 @@ public class StockView {
     
     	// @TODO graph stuffs here
     	//chart.addSeries("a", graphData, graphData2);
-    	chart.updateXYSeries("Stock value", graphData2, graphData, null);
+    	//chart.updateXYSeries("Stock value", graphData2, graphData, null);
+    	chart.updateOHLCSeries("Stock value", graphData2, graphData, graphData, graphData, graphData);
     	chartPanel.revalidate();
     	chartPanel.repaint();
     }
