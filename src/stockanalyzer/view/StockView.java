@@ -2,6 +2,10 @@ package stockanalyzer.view;
 
 import stockanalyzer.controller.StockController;
 import stockanalyzer.model.APICallParams;
+import stockanalyzer.model.APICallParams.Interval;
+import stockanalyzer.model.APICallParams.OutputSize;
+import stockanalyzer.model.APICallParams.TimeSeries;
+
 import javax.swing.border.EmptyBorder;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockEntry;
@@ -24,6 +28,7 @@ import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,8 +51,7 @@ public class StockView {
 	private XYChart chart;
 	private JPanel chartPanel;
 
-	public StockView(StockController contrlr)
-	{
+	public StockView(StockController contrlr) {
 		controller = contrlr;
 
 		BuildWindow();
@@ -55,7 +59,7 @@ public class StockView {
 
         ArrayList<String> options = new ArrayList<String>(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
                 "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
-        itemAdder(timSerBox, options);
+        setComboBoxOptions(timSerBox, options);
         options.clear();
 
         defaultOptions();
@@ -237,6 +241,9 @@ public class StockView {
 
     public void setModelData(StockModel model) {
 
+    	/*
+    	 * Formatting input data to output to UI
+    	 */
     	
     	StringBuilder text = new StringBuilder();
     	
@@ -300,32 +307,33 @@ public class StockView {
     private void defaultOptions() {
 
         ArrayList<String> options = new ArrayList<String>(Arrays.asList("open", "high", "low", "close", "volume"));
-        itemAdder(datSerBox, options);
+        setComboBoxOptions(datSerBox, options);
+        datSerBox.setEnabled(true);
         options.clear();
 
         options.addAll(Arrays.asList("MSFT", "TSLA", "GOOGL", "AABA", "ULTA"));
-        itemAdder(smblBox, options);
+        setComboBoxOptions(smblBox, options);
+        smblBox.setEnabled(true);
         options.clear();
 
         options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
-        itemAdder(timIntBox, options);
+        setComboBoxOptions(timIntBox, options);
+        timIntBox.setEnabled(true);
         options.clear();
 
         options.addAll(Arrays.asList("compact", "full"));
-        itemAdder(outSizBox, options);
+        setComboBoxOptions(outSizBox, options);
+        outSizBox.setEnabled(true);
         options.clear();
 
     }
 
-    private void itemAdder(JComboBox<String> box, ArrayList<String> options){
+    private void setComboBoxOptions(JComboBox<String> box, ArrayList<String> options){
 
         //Makes sure ArrayList isn't empty
         if (options.size() == 0){
             return;
         }
-
-        //Makes sure box isn't disabled
-        box.setEnabled(true);
 
         //Clears box
         box.removeAllItems();
@@ -338,6 +346,10 @@ public class StockView {
 
     private void componentListeners() {
 
+    	// We only set up the dependencies on each inputfield here
+    	
+    	// The manager of this class handles what is done when a query is made
+    	
         //ActionListener for time series
         timSerBox.addActionListener(evt -> {
 
@@ -350,63 +362,75 @@ public class StockView {
                     break;
                 case 1:
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     options.addAll(Arrays.asList("compact", "full"));
-                    itemAdder(outSizBox, options);
+                    setComboBoxOptions(outSizBox, options);
+                    outSizBox.setEnabled(true);
                     options.clear();
 
                     //Disables box
-                    disableBox(timIntBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
                     break;
                 case 2:
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily adjusted close", "daily volume", "daily dividend amount", "daily split coefficient"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     options.addAll(Arrays.asList("compact", "full"));
-                    itemAdder(outSizBox, options);
+                    setComboBoxOptions(outSizBox, options);
+                    outSizBox.setEnabled(true);
                     options.clear();
 
                     //Disables box
-                    disableBox(timIntBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
                     break;
                 case 3:
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly volume"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     //Disables box
-                    disableBox(timIntBox);
-                    disableBox(outSizBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
+                    outSizBox.setEnabled(false);
+                    outSizBox.removeAllItems();
                     break;
                 case 4:
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly dividend"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     //Disables box
-                    disableBox(outSizBox);
-                    disableBox(timIntBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
+                    outSizBox.setEnabled(false);
+                    outSizBox.removeAllItems();
                     break;
                 case 5:
                     options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly volume"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     //Disables box
-                    disableBox(outSizBox);
-                    disableBox(timIntBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
+                    outSizBox.setEnabled(false);
+                    outSizBox.removeAllItems();
                     break;
                 case 6:
                     options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly adjusted close", "monthly volume", "monthly dividend"));
-                    itemAdder(datSerBox, options);
+                    setComboBoxOptions(datSerBox, options);
                     options.clear();
 
                     //Disables box
-                    disableBox(outSizBox);
-                    disableBox(timIntBox);
+                    timIntBox.setEnabled(false);
+                    timIntBox.removeAllItems();
+                    outSizBox.setEnabled(false);
+                    outSizBox.removeAllItems();
                     break;
                 default:
                     break;
@@ -414,90 +438,83 @@ public class StockView {
 
         });
 
-	    //ActionListener for query Button
-        queryButton.addActionListener(evt -> createParameters());
-
+    }
+    
+    /**
+     * Add a listener for when a query is made
+     */
+    public void addQueryListener(ActionListener actionListener) {
+    	queryButton.addActionListener(actionListener);
     }
 
-    private void createParameters() {
-
-        APICallParams.TimeSeries timeSerie;
-        APICallParams.Interval interval;
-        APICallParams.OutputSize size;
-
-        switch (timSerBox.getSelectedItem().toString()) {
-            case "TIME_SERIES_INTRADAY":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
-                break;
-            case "TIME_SERIES_DAILY":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY;
-                break;
-            case "TIME_SERIES_DAILY_ADJUSTED":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_DAILY_ADJUSTED;
-                break;
-            case "TIME_SERIES_WEEKLY":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY;
-                break;
-            case "TIME_SERIES_WEEKLY_ADJUSTED":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
-                break;
-            case "TIME_SERIES_MONTHLY":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_MONTHLY;
-                break;
-            case "TIME_SERIES_MONTHLY_ADJUSTED":
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
-                break;
-            default:
-                timeSerie = APICallParams.TimeSeries.TIME_SERIES_INTRADAY;
-                break;
-        }
-
-        switch (timIntBox.getSelectedItem().toString()) {
-            case "1min":
-                interval = APICallParams.Interval.OneMin;
-                break;
-            case "5min":
-                interval = APICallParams.Interval.FiveMin;
-                break;
-            case "15min":
-                interval = APICallParams.Interval.FifteenMin;
-                break;
-            case "30min":
-                interval = APICallParams.Interval.ThirtyMin;
-                break;
-            case "60min":
-                interval = APICallParams.Interval.SixtyMin;
-                break;
-            default:
-                interval = APICallParams.Interval.OneMin;
-                break;
-        }
-
-        switch (outSizBox.getSelectedItem().toString()){
-            case "compact":
-                size = APICallParams.OutputSize.COMPACT;
-                break;
-            case "full":
-                size = APICallParams.OutputSize.FULL;
-                break;
-            default:
-                size = null;
-                break;
-        }
-
-        APICallParams params = new APICallParams(timeSerie, interval, smblBox.getSelectedItem().toString(), APICallParams.DataType.JSON, size, "XVXEHHDH9BOTXCBQ");
-
-        controller.doAPIRequest(params);
-
+    /**
+     * Gets the currently selected TimeSeries
+     */
+    public TimeSeries getTimeSeries() {
+    	switch (timSerBox.getSelectedItem().toString()) {
+	        case "TIME_SERIES_INTRADAY":
+	            return TimeSeries.TIME_SERIES_INTRADAY;
+	        case "TIME_SERIES_DAILY":
+	            return TimeSeries.TIME_SERIES_DAILY;
+	        case "TIME_SERIES_DAILY_ADJUSTED":
+	            return TimeSeries.TIME_SERIES_DAILY_ADJUSTED;
+	        case "TIME_SERIES_WEEKLY":
+	            return TimeSeries.TIME_SERIES_WEEKLY;
+	        case "TIME_SERIES_WEEKLY_ADJUSTED":
+	            return TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
+	        case "TIME_SERIES_MONTHLY":
+	            return TimeSeries.TIME_SERIES_MONTHLY;
+	        case "TIME_SERIES_MONTHLY_ADJUSTED":
+	            return TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
+	        default:
+	            return TimeSeries.TIME_SERIES_INTRADAY;
+	    }
     }
-
-    private void disableBox(JComboBox box){
-
-	    //Method to disable box
-	    box.removeAllItems();
-	    box.addItem("DISABLED");
-        box.setEnabled(false);
-
+    
+    /**
+     * Gets the currently selected Interval
+     */
+    public Interval getInterval() {
+    	if(timIntBox.getItemCount() == 0) return Interval.OneMin;
+    	
+    	switch (timIntBox.getSelectedItem().toString()) {
+	        case "1min":
+	            return Interval.OneMin;
+	        case "5min":
+	            return Interval.FiveMin;
+	        case "15min":
+	        	return Interval.FifteenMin;
+	        case "30min":
+	        	return Interval.ThirtyMin;
+	        case "60min":
+	        	return Interval.SixtyMin;
+	        default:
+	        	return Interval.OneMin;
+	    }
     }
+    
+    /**
+     * Gets the currently selected Output Size, either FULL or COMPACT
+     */
+    public OutputSize getOutputSize() {
+    	if(outSizBox.getItemCount() == 0) return OutputSize.FULL;
+    	
+    	switch (outSizBox.getSelectedItem().toString()){
+	        case "compact":
+	        	return OutputSize.COMPACT;
+	        case "full":
+	            return OutputSize.FULL;
+	        default:
+	        	return OutputSize.FULL;
+	    }
+    }
+   
+    /**
+     * Get the selected Symbol
+     */
+	public String getSymbol() {
+		return smblBox.getSelectedItem().toString();
+	}
+
 
 }
