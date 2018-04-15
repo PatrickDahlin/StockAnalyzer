@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -466,6 +467,8 @@ public class StockView {
      */
     public void addQueryListener(ActionListener actionListener) {
     	queryButton.addActionListener(actionListener);
+    	startDateField.addFocusListener(FocusListener);
+    	endDateField.addFocusListener();
     }
 
     /**
@@ -537,5 +540,11 @@ public class StockView {
 		return smblBox.getSelectedItem().toString();
 	}
 
+    public String getStartDateField() {
+        return startDateField.getText();
+    }
 
+    public String getEndDateField() {
+        return endDateField.getText();
+    }
 }

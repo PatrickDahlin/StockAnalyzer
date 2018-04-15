@@ -12,6 +12,8 @@ import stockanalyzer.model.APICallParams.OutputSize;
 import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.view.StockView;
 
+import javax.swing.*;
+
 public class StockController {
 
 	//@TODO make private
@@ -28,7 +30,25 @@ public class StockController {
 		
 		setupView();
 	}
-	
+
+    //FocusListener for checking focus on JTextField
+    java.awt.event.FocusListener FocusListener = new java.awt.event.FocusListener(){
+	    @Override
+        public void focusGained(java.awt.event.FocusEvent focusEvent) {
+            /*Nothing to see here ;()*/
+        }
+
+        @Override
+        public void focusLost(java.awt.event.FocusEvent focusEvent) {
+            try {
+                validateDate((String) focusEvent.getSource());
+            } catch (ClassCastException ignored) {
+                //Descriptive error message
+                System.out.println("Plopp Error! ;D");
+            }
+        }
+    };
+
 	private void setupView() {
 		stockView.addQueryListener(new ActionListener() {
 		@Override
@@ -36,7 +56,13 @@ public class StockController {
 			doQuery();
 		}});
 	}
-	
+
+	//Checks if Date is a valid date
+	private boolean validateDate(String date){
+	    System.out.println(date);
+	    return true;
+    }
+
 	/**
 	 * Updates the view with the new query gotten from the UI
 	 */
