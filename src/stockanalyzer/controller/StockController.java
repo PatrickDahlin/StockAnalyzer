@@ -48,7 +48,13 @@ public class StockController {
 
             @Override
             public void focusLost(FocusEvent e) {
-                validateDate(stockView.getStartDateField());
+
+                if(validateDate(stockView.getStartDateField())){
+                    System.out.println("True");
+                } else {
+                    System.out.println("False");
+                }
+
             }
         });
 
@@ -60,14 +66,47 @@ public class StockController {
 
             @Override
             public void focusLost(FocusEvent e) {
-                validateDate(stockView.getEndDateField());
+
+                if(validateDate(stockView.getEndDateField())){
+                    System.out.println("True");
+                } else {
+                    System.out.println("False");
+                }
+
             }
         });
 	}
 
 	//Checks if Date is a valid date
 	private boolean validateDate(String date){
-	    System.out.println(date);
+
+	    //Assuming date format is DD.MM.YYYY
+
+	    date.trim();
+
+	    String[] dateSplit = date.split("[.]");
+
+	    //Check if date is split into 3 parts, DD.MM.YYYY
+	    if(dateSplit.length != 3) return false;
+
+	    //Checks if it's in int
+        for(int i = 0; i != dateSplit.length; i++){
+            try {
+                Integer.parseInt(dateSplit[i]);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        //Checks days
+        if(Integer.parseInt(dateSplit[0]) <= 0 || Integer.parseInt(dateSplit[0]) >= 32) return false;
+
+        //Checks months
+        if(Integer.parseInt(dateSplit[1]) <= 0 || Integer.parseInt(dateSplit[1]) >= 13) return false;
+
+        //Check that year has 4 chars
+        if(dateSplit[2].length() != 4) return false;
+
 	    return true;
     }
 
