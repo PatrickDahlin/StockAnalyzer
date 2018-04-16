@@ -2,6 +2,8 @@ package stockanalyzer.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
@@ -31,30 +33,36 @@ public class StockController {
 		setupView();
 	}
 
-    //FocusListener for checking focus on JTextField
-    java.awt.event.FocusListener FocusListener = new java.awt.event.FocusListener(){
-	    @Override
-        public void focusGained(java.awt.event.FocusEvent focusEvent) {
-            /*Nothing to see here ;()*/
-        }
-
-        @Override
-        public void focusLost(java.awt.event.FocusEvent focusEvent) {
-            try {
-                validateDate((String) focusEvent.getSource());
-            } catch (ClassCastException ignored) {
-                //Descriptive error message
-                System.out.println("Plopp Error! ;D");
-            }
-        }
-    };
-
 	private void setupView() {
 		stockView.addQueryListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			doQuery();
 		}});
+
+		stockView.startDateFocusLoss(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                //Dun du nutin
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                validateDate(stockView.getStartDateField());
+            }
+        });
+
+		stockView.endDateFocusLoss(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                //Dun du nutin
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                validateDate(stockView.getEndDateField());
+            }
+        });
 	}
 
 	//Checks if Date is a valid date

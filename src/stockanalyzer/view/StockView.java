@@ -461,14 +461,21 @@ public class StockView {
         });
 
     }
-    
+
+    //Adds a listener for when JTextField loses focus
+    public void startDateFocusLoss(FocusListener listener) {
+        startDateField.addFocusListener(listener);
+    }
+
+    public void endDateFocusLoss(FocusListener listener) {
+        endDateField.addFocusListener(listener);
+    }
+
     /**
      * Add a listener for when a query is made
      */
     public void addQueryListener(ActionListener actionListener) {
     	queryButton.addActionListener(actionListener);
-    	startDateField.addFocusListener(FocusListener);
-    	endDateField.addFocusListener();
     }
 
     /**
