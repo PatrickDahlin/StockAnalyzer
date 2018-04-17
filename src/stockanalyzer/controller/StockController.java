@@ -14,6 +14,8 @@ import javax.swing.*;
 
 public class StockController {
 
+	
+	
 	//@TODO make private
 	public static final String VANTAGE_API_KEY = "XVXEHHDH9BOTXCBQ";
 	

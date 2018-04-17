@@ -1,6 +1,12 @@
 package stockanalyzer.main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Properties;
 
 import stockanalyzer.controller.StockAPI;
 import stockanalyzer.controller.StockController;
@@ -26,6 +32,48 @@ import stockanalyzer.model.StockModel.TimedValue;
 /// Moment 4: Make input data depend on time-series chosen, some values should be optional or not avaliable
 /// Moment 5: Build a graph out of selected Symbol stock values next to inputs
 ///
+
+/// LinusspaghetS
+/// TODO Take in String[] of TimeSeries, APIKEY, Symbols, Outputsize, Time interval 
+
+/* Dis is data
+ TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
+ OUTPUT_SIZE = compact, full,
+ TIME_SERIES = TIME_SERIES_INTRADAY, TIME_SERIES_DAILY, TIME_SERIES_DAILY_ADJUSTED, TIME_SERIES_WEEKLY, TIME_SERIES_WEEKLY_ADJUSTED, TIME_SERIES_MONTHLY, TIME_SERIES_MONTHLY_ADJUSTED,
+ API_KEY = demo,
+ SYMBOL = A, AAPL, C, GOOG, HOG, HPQ, INTC, KO, LUV, MMM, MSFT, T, TGT, TXN, WMT,
+*/
+/*
+ * 
+   Hashtable<String, String[]> ini = new Hashtable<String, String[]>();
+		
+		
+	Properties props = new Properties();
+	try {
+		props.load(new FileInputStream("StockAnalyzer.ini"));
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	for(Object a : props.keySet())
+	{
+		String s = (String)props.get(a);
+		ArrayList<String> val = new ArrayList<String>();
+		
+		ini.put((String)a, s.split(","));
+	}
+	
+	for(String s : ini.keySet())
+	{
+		System.out.print("Ini: "+s+" = ");
+		String[] s2 = ini.get(s);
+		for(String s3 : s2)
+			System.out.print(s3+",");
+		
+		System.out.println();
+	}
+ * 
+ */
 
 public class Main {
 

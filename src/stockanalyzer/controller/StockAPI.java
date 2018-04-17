@@ -16,6 +16,7 @@ public class StockAPI {
 		StringBuilder url_str = new StringBuilder();
 		url_str.append("https://www.alphavantage.co/query?");
 		
+		
 		switch(params.getTimeSeries())
 		{
 		case "TIME_SERIES_INTRADAY":
