@@ -6,9 +6,6 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
 import stockanalyzer.controller.StockController;
-import stockanalyzer.model.APICallParams.Interval;
-import stockanalyzer.model.APICallParams.OutputSize;
-import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
@@ -533,63 +530,26 @@ public class StockView {
     /**
      * Gets the currently selected TimeSeries
      */
-    public TimeSeries getTimeSeries() {
-    	switch (timSerBox.getSelectedItem().toString()) {
-	        case "TIME_SERIES_INTRADAY":
-	            return TimeSeries.TIME_SERIES_INTRADAY;
-	        case "TIME_SERIES_DAILY":
-	            return TimeSeries.TIME_SERIES_DAILY;
-	        case "TIME_SERIES_DAILY_ADJUSTED":
-	            return TimeSeries.TIME_SERIES_DAILY_ADJUSTED;
-	        case "TIME_SERIES_WEEKLY":
-	            return TimeSeries.TIME_SERIES_WEEKLY;
-	        case "TIME_SERIES_WEEKLY_ADJUSTED":
-	            return TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
-	        case "TIME_SERIES_MONTHLY":
-	            return TimeSeries.TIME_SERIES_MONTHLY;
-	        case "TIME_SERIES_MONTHLY_ADJUSTED":
-	            return TimeSeries.TIME_SERIES_WEEKLY_ADJUSTED;
-	        default:
-	            return TimeSeries.TIME_SERIES_INTRADAY;
-	    }
+    public String getTimeSeries() {
+    	return timSerBox.getSelectedItem().toString();
     }
     
     /**
      * Gets the currently selected Interval
      */
-    public Interval getInterval() {
-    	if(timIntBox.getItemCount() == 0) return Interval.OneMin;
+    public String getInterval() {
+    	if(timIntBox.getItemCount() == 0) return "1min";
     	
-    	switch (timIntBox.getSelectedItem().toString()) {
-	        case "1min":
-	            return Interval.OneMin;
-	        case "5min":
-	            return Interval.FiveMin;
-	        case "15min":
-	        	return Interval.FifteenMin;
-	        case "30min":
-	        	return Interval.ThirtyMin;
-	        case "60min":
-	        	return Interval.SixtyMin;
-	        default:
-	        	return Interval.OneMin;
-	    }
+    	return timIntBox.getSelectedItem().toString();
     }
     
     /**
      * Gets the currently selected Output Size, either FULL or COMPACT
      */
-    public OutputSize getOutputSize() {
-    	if(outSizBox.getItemCount() == 0) return OutputSize.FULL;
+    public String getOutputSize() {
+    	if(outSizBox.getItemCount() == 0) return "FULL";
     	
-    	switch (outSizBox.getSelectedItem().toString()){
-	        case "compact":
-	        	return OutputSize.COMPACT;
-	        case "full":
-	            return OutputSize.FULL;
-	        default:
-	        	return OutputSize.FULL;
-	    }
+    	return outSizBox.getSelectedItem().toString();
     }
    
     /**

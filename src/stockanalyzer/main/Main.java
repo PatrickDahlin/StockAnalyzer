@@ -6,10 +6,6 @@ import stockanalyzer.controller.StockAPI;
 import stockanalyzer.controller.StockController;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
-import stockanalyzer.model.APICallParams.DataType;
-import stockanalyzer.model.APICallParams.Interval;
-import stockanalyzer.model.APICallParams.OutputSize;
-import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
@@ -37,11 +33,11 @@ public class Main {
 	{
 		System.out.println("Running test");
 		// @Cleanup this whole constructor will be removed, only for testing output from stockmodel atm
-		JSONObject myjson = StockAPI.getRequest(new APICallParams(TimeSeries.TIME_SERIES_MONTHLY_ADJUSTED,
-																	Interval.OneMin,
+		JSONObject myjson = StockAPI.getRequest(new APICallParams("TIME_SERIES_MONTHLY_ADJUSTED",
+																	"1min",
 																	"MSFT",
-																	DataType.JSON,
-																	OutputSize.FULL,
+																	"JSON",
+																	"FULL",
 																	StockController.VANTAGE_API_KEY));
 		
 		StockModel model;

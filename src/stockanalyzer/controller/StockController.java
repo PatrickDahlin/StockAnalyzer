@@ -8,10 +8,6 @@ import java.awt.event.FocusListener;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.StockModel;
-import stockanalyzer.model.APICallParams.DataType;
-import stockanalyzer.model.APICallParams.Interval;
-import stockanalyzer.model.APICallParams.OutputSize;
-import stockanalyzer.model.APICallParams.TimeSeries;
 import stockanalyzer.view.StockView;
 
 import javax.swing.*;
@@ -114,12 +110,12 @@ public class StockController {
 	 * Updates the view with the new query gotten from the UI
 	 */
 	private void doQuery() {	
-		TimeSeries ts = stockView.getTimeSeries();
-		Interval interval = stockView.getInterval();
+		String ts = stockView.getTimeSeries();
+		String interval = stockView.getInterval();
 		String symbol = stockView.getSymbol();
-		OutputSize os = stockView.getOutputSize();
+		String os = stockView.getOutputSize();
 		
-		APICallParams params = new APICallParams(ts, interval, symbol, DataType.JSON, os, VANTAGE_API_KEY);
+		APICallParams params = new APICallParams(ts, interval, symbol, "JSON", os, VANTAGE_API_KEY);
 		
 		doAPIRequest(params);
 		
