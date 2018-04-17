@@ -1,40 +1,28 @@
 package stockanalyzer.view;
 
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.style.Styler.LegendLayout;
+import org.knowm.xchart.style.Styler.LegendPosition;
 import stockanalyzer.controller.StockController;
-import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.APICallParams.Interval;
 import stockanalyzer.model.APICallParams.OutputSize;
 import stockanalyzer.model.APICallParams.TimeSeries;
-
-import javax.swing.border.EmptyBorder;
 import stockanalyzer.model.StockModel;
 import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.html.Option;
-
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.OHLCChart;
-import org.knowm.xchart.OHLCChartBuilder;
-import org.knowm.xchart.OHLCSeries.OHLCSeriesRenderStyle;
-import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
-import org.knowm.xchart.style.Styler.LegendLayout;
-import org.knowm.xchart.style.Styler.LegendPosition;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 public class StockView {
@@ -43,10 +31,16 @@ public class StockView {
 	private JComboBox<String> datSerBox;
 	private JComboBox<String> timSerBox;
 	private JComboBox<String> smblBox;
+	private JComboBox<String> smbl2Box;
 	private JComboBox<String> timIntBox;
 	private JComboBox<String> outSizBox;
+	private JTextField startDateField;
+	private JTextField endDateField;
     private JButton queryButton;
 	private JTextArea textField;
+	private JTextField apiKeyField;
+	private JTextField pearsonField;
+	private JButton pearsonButton;
 	
 	private XYChart chart;
 	private JPanel chartPanel;
@@ -72,7 +66,6 @@ public class StockView {
         JFrame stockView = new JFrame("StockView");
         stockView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         stockView.setResizable(false); // removes ability to resize the window
-        
 
         GridBagLayout g = new GridBagLayout();
         GridBagConstraints vcons = new GridBagConstraints();
@@ -80,7 +73,7 @@ public class StockView {
         stockView.setLayout(g);
         
         JPanel leftP = new JPanel();
-        leftP.setPreferredSize(new Dimension(400,500));
+        leftP.setPreferredSize(new Dimension(700,800));
         stockView.add(leftP);
         vcons.gridx = 0;
         vcons.gridy = 0;
@@ -121,81 +114,146 @@ public class StockView {
         cons.gridx = 0;
         cons.gridy = 0;
         cons.ipadx = 10;
-        JLabel datSerLbl = new JLabel("Data Series:");
-        stockLayout.setConstraints(datSerLbl, cons);
-        compPanel.add(datSerLbl);
+        JLabel apiLabel = new JLabel("API Key:");
+        stockLayout.setConstraints(apiLabel, cons);
+        compPanel.add(apiLabel);
 
         cons.gridx = 1;
         cons.gridy = 0;
         cons.ipadx = 300;
-        datSerBox = new JComboBox<String>();
-        stockLayout.setConstraints(datSerBox, cons);
-        compPanel.add(datSerBox);
+        apiKeyField = new JTextField();
+        stockLayout.setConstraints(apiKeyField, cons);
+        compPanel.add(apiKeyField);
         cons.ipadx = 30;
 
         //2st Row
         cons.gridx = 0;
         cons.gridy = 1;
+        cons.ipadx = 10;
+        JLabel datSerLbl = new JLabel("Data Series:");
+        datSerLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(datSerLbl, cons);
+        compPanel.add(datSerLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 1;
+        cons.ipadx = 300;
+        datSerBox = new JComboBox<String>();
+        datSerBox.setBorder(spaceBorder);
+        stockLayout.setConstraints(datSerBox, cons);
+        compPanel.add(datSerBox);
+        cons.ipadx = 30;
+
+        //3nd Row
+        cons.gridx = 0;
+        cons.gridy = 2;
         JLabel timSerLbl = new JLabel("Time Series:");
         timSerLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(timSerLbl, cons);
         compPanel.add(timSerLbl);
 
         cons.gridx = 1;
-        cons.gridy = 1;
+        cons.gridy = 2;
         timSerBox = new JComboBox<String>();
         timSerBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timSerBox, cons);
         compPanel.add(timSerBox);
 
-        //3st Row
+        //4rd Row
         cons.gridx = 0;
-        cons.gridy = 2;
-        JLabel smblLbl = new JLabel("Symbol:");
+        cons.gridy = 3;
+        JLabel smblLbl = new JLabel("Symbol 1:");
         smblLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(smblLbl, cons);
         compPanel.add(smblLbl);
 
         cons.gridx = 1;
-        cons.gridy = 2;
+        cons.gridy = 3;
         smblBox = new JComboBox<String>();
         smblBox.setBorder(spaceBorder);
         stockLayout.setConstraints(smblBox, cons);
         compPanel.add(smblBox);
 
-        //4st Row
+        //5th Row
         cons.gridx = 0;
-        cons.gridy = 3;
+        cons.gridy = 4;
+        JLabel smblLbl2 = new JLabel("Symbol 2:");
+        smblLbl2.setBorder(spaceBorder);
+        stockLayout.setConstraints(smblLbl2, cons);
+        compPanel.add(smblLbl2);
+
+        cons.gridx = 1;
+        cons.gridy = 4;
+        smbl2Box = new JComboBox<String>();
+        smbl2Box.setBorder(spaceBorder);
+        stockLayout.setConstraints(smbl2Box, cons);
+        compPanel.add(smbl2Box);
+
+        //6th Row
+        cons.gridx = 0;
+        cons.gridy = 5;
         JLabel timIntLbl = new JLabel("Time Interval:");
         timIntLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntLbl, cons);
         compPanel.add(timIntLbl);
 
         cons.gridx = 1;
-        cons.gridy = 3;
+        cons.gridy = 5;
         timIntBox = new JComboBox<String>();
         timIntBox.setBorder(spaceBorder);
         stockLayout.setConstraints(timIntBox, cons);
         compPanel.add(timIntBox);
 
-        //5st Row
+        //7th Row
         cons.gridx = 0;
-        cons.gridy = 4;
+        cons.gridy = 6;
         JLabel outSizLbl = new JLabel("Output Size:");
         outSizLbl.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizLbl, cons);
         compPanel.add(outSizLbl);
 
         cons.gridx = 1;
-        cons.gridy = 4;
+        cons.gridy = 6;
         outSizBox = new JComboBox<String>();
         outSizBox.setBorder(spaceBorder);
         stockLayout.setConstraints(outSizBox, cons);
         compPanel.add(outSizBox);
 
+        //8th Row
+        cons.gridx = 0;
+        cons.gridy = 7;
+        JLabel startDateLbl = new JLabel("Start Date:");
+        startDateLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(startDateLbl, cons);
+        compPanel.add(startDateLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 7;
+        cons.insets = new Insets(14,0,0,0);
+        startDateField = new JTextField();
+        stockLayout.setConstraints(startDateField, cons);
+        compPanel.add(startDateField);
+        cons.insets = new Insets(0,0,0,0);
+
+        //9th Row
+        cons.gridx = 0;
+        cons.gridy = 8;
+        JLabel endDateLbl = new JLabel("End Date:");
+        endDateLbl.setBorder(spaceBorder);
+        stockLayout.setConstraints(endDateLbl, cons);
+        compPanel.add(endDateLbl);
+
+        cons.gridx = 1;
+        cons.gridy = 8;
+        cons.insets = new Insets(14,0,0,0);
+        endDateField = new JTextField();
+        stockLayout.setConstraints(endDateField, cons);
+        compPanel.add(endDateField);
+        cons.insets = new Insets(0,0,0,0);
+
         //Adds query button
         cons.gridx = 1;
-        cons.gridy = 5;
+        cons.gridy = 9;
         cons.weighty = 0.5;
         cons.weightx = 0.5;
         cons.fill = GridBagConstraints.CENTER;
@@ -204,6 +262,22 @@ public class StockView {
         stockLayout.setConstraints(queryButton, cons);
         compPanel.add(queryButton);
 
+        //Adds Pearson Button & Label
+        cons.gridx = 0;
+        cons.gridy = 10;
+        pearsonButton = new JButton("Pearson Correlation");
+        cons.insets = new Insets(14,0,0,10);
+        stockLayout.setConstraints(pearsonButton, cons);
+        compPanel.add(pearsonButton);
+
+        cons.gridx = 1;
+        cons.gridy = 10;
+        cons.insets = new Insets(14,0,0,0);
+        cons.fill = GridBagConstraints.BOTH;
+        pearsonField = new JTextField();
+        stockLayout.setConstraints(pearsonField, cons);
+        compPanel.add(pearsonField);
+        cons.insets = new Insets(0,0,0,0);
 
         chart = new XYChartBuilder().title("Stock chart").width(600).height(500).xAxisTitle("Time").yAxisTitle("Value").build();
 
@@ -439,7 +513,16 @@ public class StockView {
         });
 
     }
-    
+
+    //Adds a listener for when JTextField loses focus
+    public void startDateFocusLoss(FocusListener listener) {
+        startDateField.addFocusListener(listener);
+    }
+
+    public void endDateFocusLoss(FocusListener listener) {
+        endDateField.addFocusListener(listener);
+    }
+
     /**
      * Add a listener for when a query is made
      */
@@ -516,5 +599,11 @@ public class StockView {
 		return smblBox.getSelectedItem().toString();
 	}
 
+    public String getStartDateField() {
+        return startDateField.getText();
+    }
 
+    public String getEndDateField() {
+        return endDateField.getText();
+    }
 }
