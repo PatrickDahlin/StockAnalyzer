@@ -95,15 +95,22 @@ public class StockModel {
 
 		// Get the data, we don't need metadata
 		
-		Iterator<String> i = root.keys();		
+		Iterator<String> i = root.keys();
+		if(!i.hasNext()) {
+			System.out.println("No data");
+			return;
+		}
 		String data_key = i.next(); // Gets the Data String
 		// In some cases the metadata is in the beginning......
-		while(i.hasNext() && data_key.equals("Meta Data"))
-		{
+		while(i.hasNext() && data_key.equals("Meta Data")) {
 			data_key = i.next();
 		}
 
 		
+		if(!root.has(data_key)) {
+			System.out.println("Parsing error: "+data_key+" couldn't be found!");
+			return;
+		}
 		JSONObject tmp = root.getJSONObject(data_key);
 		if(tmp == null) throw new Exception("Malformed JSON Object");
 		// Now we have the JSON-Object for the Data container
@@ -125,7 +132,7 @@ public class StockModel {
 			// And loop it's children to fill in it's values
 			for(String values : child.keySet())
 			{
-				//System.out.println("\t" + values + " : " + child.get(values));
+				System.out.println("\t" + values + " : " + child.get(values));
 				String value = child.getString(values);
 				stockVal.values.add(new TimedValue(values, Float.parseFloat(value)));
 			}
