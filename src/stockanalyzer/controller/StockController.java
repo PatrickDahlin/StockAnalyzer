@@ -166,7 +166,7 @@ public class StockController {
     }
 
 	// Pearson Correlation
-	public double CorrelationCalc(ArrayList<StockEntry> list1, ArrayList<StockEntry> list2, String dataseries) {
+	public double CorrelationCalc(ArrayList<StockEntry> list1, ArrayList<StockEntry> list2, String dataSeries) {
 	    double sumX= 0.0, sumY = 0.0, sumXX = 0.0, sumYY = 0.0, sumXY = 0.0;
 
 	    int length = Math.min(list1.size(), list2.size());
@@ -175,9 +175,10 @@ public class StockController {
 	    	System.out.println("Warning! The two lists used for Pearsons Correlation aren't the same size!");
 
 	    for (int i=0; i<length; i++) {
-	    	// TODO !!!
-	        float x = 0;//list1.get(i);
-	        float y = 0;//list2.get(i);
+	    	
+	    	// Get the Stock value for the given dataseries
+	        float x = list1.get(i).getValueFromSeries(dataSeries).value;
+	        float y = list2.get(i).getValueFromSeries(dataSeries).value;
 
 	        sumX+=x;
 	        sumY+=y;
@@ -211,7 +212,7 @@ public class StockController {
 		
 		// TODO Calculate Pearsons Correlation if we have both symbols loaded
 		
-		double correlation = 0; // = CorrelationCalc(stockModel.getData(), stockModel.getData());
+		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
 		
 		stockView.setModelData(stockModel);
 	}

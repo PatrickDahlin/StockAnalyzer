@@ -28,6 +28,18 @@ public class StockModel {
 	public class StockEntry {
 		public String time = "";
 		public ArrayList<TimedValue> values = new ArrayList<TimedValue>();
+		
+		/**
+		 * Lazy search for TimedValue using dataseries.<br> Note: Searching for dataSeries key only does .contains check
+		 */
+		public TimedValue getValueFromSeries(String dataSeries)
+		{
+			for(TimedValue e : values)
+				if(e.title.contains(dataSeries))
+					return e;
+		
+			return null;
+		}
 	}
 	
 	
