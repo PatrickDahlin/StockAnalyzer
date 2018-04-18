@@ -57,8 +57,12 @@ public class StockController {
 			{
 				String s = (String)props.get(a);
 				ArrayList<String> val = new ArrayList<String>();
+				String[] values = s.split(",");
 				
-				ini.put((String)a, s.split(","));
+				for(int i=0; i < values.length; i++)
+					values[i] = values[i].trim();
+					
+				ini.put((String)a, values);
 			}
 			System.out.println("Loaded ini file successfully!");
 		} catch (Exception e) {
