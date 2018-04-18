@@ -83,7 +83,7 @@ public class StockAPI {
 			e.printStackTrace();
 			return new JSONObject();
 		}
-		
+
 		return new JSONObject(response);
 	}
 }

@@ -328,6 +328,11 @@ public class StockView {
     	text.append("========== Listing data: ");
     	text.append(datSerBox.getSelectedItem().toString());
     	text.append(" ==========");
+    	
+    	if(v.size() == 0)
+    	{
+    		text.append("\nNo data avaliable");
+    	}
     	for(StockEntry entry : v)
     	{
     		for(TimedValue val : entry.values)
@@ -365,8 +370,11 @@ public class StockView {
     	
     	// Chart needs to have data to properly render, otherwise it throws an error
     	if(graphData.size() == 0)
-    			graphData.add(0f);
+    		graphData.add(0f);
     	
+    	if(graphData2.size() == 0)
+    		graphData2.add(new Date());
+    		
     	chart.removeSeries("Stock value");
     	chart.addSeries("Stock value", graphData2, graphData);
     	

@@ -38,6 +38,8 @@ public class StockController {
 	{
 		Hashtable<String, String[]> ini = new Hashtable<String, String[]>();
 		
+		// TODO check for spaces
+		
 		// Read in the ini
 		Properties props = new Properties();
 		try {
@@ -58,8 +60,8 @@ public class StockController {
 			// Something went wrong
 		}
 		
-		VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
-		System.out.println(VANTAGE_API_KEY);
+		// TODO demo key doesn't return any data anymore
+		//VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
 		String[] time_intervals = ini.getOrDefault("TIME_INTERVAL", new String[] {"1min","5min","15min","30min","60min"});
 		String[] output_size = ini.getOrDefault("OUTPUT_SIZE", new String[] {"compact","full"});
 		String[] time_series = ini.getOrDefault("TIME_SERIES", new String[] {"TIME_SERIES_INTRADAY",

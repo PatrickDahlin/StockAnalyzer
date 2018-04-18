@@ -95,6 +95,12 @@ public class StockModel {
 
 		// Get the data, we don't need metadata
 		
+		if(root.keySet().size() < 2)
+		{
+			System.out.println("Input data is invalid...");
+			return;
+		}
+		
 		Iterator<String> i = root.keys();
 		if(!i.hasNext()) {
 			System.out.println("No data");
@@ -106,11 +112,6 @@ public class StockModel {
 			data_key = i.next();
 		}
 
-		
-		if(!root.has(data_key)) {
-			System.out.println("Parsing error: "+data_key+" couldn't be found!");
-			return;
-		}
 		JSONObject tmp = root.getJSONObject(data_key);
 		if(tmp == null) throw new Exception("Malformed JSON Object");
 		// Now we have the JSON-Object for the Data container
