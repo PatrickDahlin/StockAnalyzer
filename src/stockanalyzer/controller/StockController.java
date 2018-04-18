@@ -81,7 +81,12 @@ public class StockController {
 		String[] symbols = ini.getOrDefault("SYMBOL", new String[] {"MSFT","GOOG"});
 
 		// TODO Load in all this data into view 
-		
+
+        stockView.setInterval(time_intervals);
+        stockView.setOutput(output_size);
+        stockView.setSymbols(symbols);
+        stockView.setSeries(time_series);
+
 		/* Dis is data
 		 TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
 		 OUTPUT_SIZE = compact, full,

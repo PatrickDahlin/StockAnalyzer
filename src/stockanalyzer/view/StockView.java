@@ -38,7 +38,12 @@ public class StockView {
 	private JTextField apiKeyField;
 	private JTextField pearsonField;
 	private JButton pearsonButton;
-	
+
+	private String[] timeSeries;
+	private String[] symbols;
+	private String[] intervals;
+	private String[] outputs;
+
 	private XYChart chart;
 	private JPanel chartPanel;
 
@@ -46,14 +51,6 @@ public class StockView {
 		controller = contrlr;
 
 		BuildWindow();
-
-
-        ArrayList<String> options = new ArrayList<String>(Arrays.asList("TIME_SERIES_INTRADAY", "TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED",
-                "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"));
-        setComboBoxOptions(timSerBox, options);
-        options.clear();
-
-        defaultOptions();
 
 		componentListeners();
 	}
@@ -391,17 +388,20 @@ public class StockView {
         datSerBox.setEnabled(true);
         options.clear();
 
-        options.addAll(Arrays.asList("MSFT", "TSLA", "GOOGL", "AABA", "ULTA"));
+        options.addAll(Arrays.asList(symbols));
         setComboBoxOptions(smblBox, options);
         smblBox.setEnabled(true);
+
+        setComboBoxOptions(smbl2Box, options);
+        smbl2Box.setEnabled(true);
         options.clear();
 
-        options.addAll(Arrays.asList("1min", "5min", "15min", "30min", "60min"));
+        options.addAll(Arrays.asList(intervals));
         setComboBoxOptions(timIntBox, options);
         timIntBox.setEnabled(true);
         options.clear();
 
-        options.addAll(Arrays.asList("compact", "full"));
+        options.addAll(Arrays.asList(outputs));
         setComboBoxOptions(outSizBox, options);
         outSizBox.setEnabled(true);
         options.clear();
@@ -436,16 +436,16 @@ public class StockView {
             ArrayList<String> options = new ArrayList<String>();
 
             //Depending on choice
-            switch (timSerBox.getSelectedIndex()) {
-                case 0:
+            switch (timSerBox.getSelectedItem().toString()) {
+                case "TIME_SERIES_INTRADAY":
                     defaultOptions();
                     break;
-                case 1:
+                case "TIME_SERIES_DAILY":
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily volume"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
 
-                    options.addAll(Arrays.asList("compact", "full"));
+                    options.addAll(Arrays.asList(outputs));
                     setComboBoxOptions(outSizBox, options);
                     outSizBox.setEnabled(true);
                     options.clear();
@@ -454,12 +454,12 @@ public class StockView {
                     timIntBox.setEnabled(false);
                     timIntBox.removeAllItems();
                     break;
-                case 2:
+                case "TIME_SERIES_DAILY_ADJUSTED":
                     options.addAll(Arrays.asList("daily open", "daily high", "daily low", "daily close", "daily adjusted close", "daily volume", "daily dividend amount", "daily split coefficient"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
 
-                    options.addAll(Arrays.asList("compact", "full"));
+                    options.addAll(Arrays.asList(outputs));
                     setComboBoxOptions(outSizBox, options);
                     outSizBox.setEnabled(true);
                     options.clear();
@@ -468,7 +468,7 @@ public class StockView {
                     timIntBox.setEnabled(false);
                     timIntBox.removeAllItems();
                     break;
-                case 3:
+                case "TIME_SERIES_WEEKLY":
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly volume"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
@@ -479,7 +479,7 @@ public class StockView {
                     outSizBox.setEnabled(false);
                     outSizBox.removeAllItems();
                     break;
-                case 4:
+                case "TIME_SERIES_WEEKLY_ADJUSTED":
                     options.addAll(Arrays.asList("weekly open", "weekly high", "weekly low", "weekly close", "weekly adjusted close", "weekly volume", "weekly dividend"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
@@ -490,7 +490,7 @@ public class StockView {
                     outSizBox.setEnabled(false);
                     outSizBox.removeAllItems();
                     break;
-                case 5:
+                case "TIME_SERIES_MONTHLY":
                     options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly volume"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
@@ -501,7 +501,7 @@ public class StockView {
                     outSizBox.setEnabled(false);
                     outSizBox.removeAllItems();
                     break;
-                case 6:
+                case "TIME_SERIES_MONTHLY_ADJUSTED":
                     options.addAll(Arrays.asList("monthly open", "monthly high", "monthly low", "monthly close", "monthly adjusted close", "monthly volume", "monthly dividend"));
                     setComboBoxOptions(datSerBox, options);
                     options.clear();
@@ -513,6 +513,7 @@ public class StockView {
                     outSizBox.removeAllItems();
                     break;
                 default:
+                    System.out.println("Unable to match time serie");
                     break;
             }
 
@@ -575,4 +576,34 @@ public class StockView {
     public String getEndDateField() {
         return endDateField.getText();
     }
+
+    public void setSymbols(String[] smbl){
+
+	    symbols = smbl;
+
+    }
+
+    public  void setInterval(String[] interval){
+
+        intervals = interval;
+
+    }
+
+    public void setOutput(String[] output){
+
+        outputs = output;
+
+    }
+
+    public void setSeries(String[] series){
+
+        timeSeries = series;
+
+        ArrayList<String> options = new ArrayList<String>(Arrays.asList(timeSeries));
+        setComboBoxOptions(timSerBox, options);
+
+        defaultOptions();
+
+    }
+
 }
