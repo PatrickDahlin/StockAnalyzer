@@ -5,7 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -79,10 +83,14 @@ public class StockController {
 																				"TIME_SERIES_MONTHLY",
 																				"TIME_SERIES_MONTHLY_ADJUSTED"});
 		String[] symbols = ini.getOrDefault("SYMBOL", new String[] {"MSFT","GOOG"});
-		
-		
+
 		// TODO Load in all this data into view 
-		
+
+        stockView.setInterval(time_intervals);
+        stockView.setOutput(output_size);
+        stockView.setSymbols(symbols);
+        stockView.setSeries(time_series);
+
 		/* Dis is data
 		 TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
 		 OUTPUT_SIZE = compact, full,
@@ -141,30 +149,15 @@ public class StockController {
 
 	    //Assuming date format is DD.MM.YYYY
 
-	    date.trim();
+	    date = date.trim();
+        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YYYY");
 
-	    String[] dateSplit = date.split("[.]");
 
-	    //Check if date is split into 3 parts, DD.MM.YYYY
-	    if(dateSplit.length != 3) return false;
-
-	    //Checks if it's in int
-        for(int i = 0; i != dateSplit.length; i++){
-            try {
-                Integer.parseInt(dateSplit[i]);
-            } catch (NumberFormatException e) {
-                return false;
-            }
+	    try {
+            Date dateParse = dateFormat.parse(date);
+        } catch (ParseException e){
+	        return false;
         }
-
-        //Checks days
-        if(Integer.parseInt(dateSplit[0]) <= 0 || Integer.parseInt(dateSplit[0]) >= 32) return false;
-
-        //Checks months
-        if(Integer.parseInt(dateSplit[1]) <= 0 || Integer.parseInt(dateSplit[1]) >= 13) return false;
-
-        //Check that year has 4 chars
-        if(dateSplit[2].length() != 4) return false;
 
 	    return true;
     }
