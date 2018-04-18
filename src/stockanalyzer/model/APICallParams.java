@@ -3,13 +3,13 @@ package stockanalyzer.model;
 public class APICallParams {
 
 	private String apiKey;
-	private TimeSeries series; // works as function in call
-	private Interval interval;
+	private String series; // works as function in call
+	private String interval;
 	private String symbol;
-	private DataType datatype; // should always be JSON though
-	private OutputSize size;
+	private String datatype; // should always be JSON though
+	private String size;
 	
-	public APICallParams(TimeSeries timeSeries, Interval interval, String symbol, DataType type, OutputSize output, String APIKey) {
+	public APICallParams(String timeSeries, String interval, String symbol, String type, String output, String APIKey) {
 		apiKey = APIKey;
 		series = timeSeries;
 		this.interval = interval;
@@ -18,13 +18,13 @@ public class APICallParams {
 		size = output;
 	}
 	
-	public TimeSeries getTimeSeries() { return series; }
+	public String getTimeSeries() { return series; }
 	public String getSymbol() { return symbol; }
-	public DataType getDataType() { return datatype; }
-	public OutputSize getOutputSize() { return size; }
+	public String getDataType() { return datatype; }
+	public String getOutputSize() { return size; }
 	public String getAPIKey() { return apiKey; }
-	public Interval getInterval() { return interval; }
-	
+	public String getInterval() { return interval; }
+	/*
 	public enum DataType { JSON, CSV }
 	public enum OutputSize { COMPACT, FULL }
 	public enum TimeSeries {
@@ -39,7 +39,7 @@ public class APICallParams {
 		Interval(String v) { this.value = v; }
 		@Override
 		public String toString() { return value; }
-	}
+	}*/
 	
 	// TIME_SERIES_INTRADAY, timeseries/function(req), symbol(req), interval(req), outputsize(opt), datatype(opt), apikey(req)
 	// TIME_SERIES_DAILY, 			function(req), symbol(req), outputsize(opt), datatype(opt), apikey(req)

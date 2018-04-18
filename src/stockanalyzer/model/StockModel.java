@@ -28,6 +28,18 @@ public class StockModel {
 	public class StockEntry {
 		public String time = "";
 		public ArrayList<TimedValue> values = new ArrayList<TimedValue>();
+		
+		/**
+		 * Lazy search for TimedValue using dataseries.<br> Note: Searching for dataSeries key only does .contains check
+		 */
+		public TimedValue getValueFromSeries(String dataSeries)
+		{
+			for(TimedValue e : values)
+				if(e.title.contains(dataSeries))
+					return e;
+		
+			return null;
+		}
 	}
 	
 	
@@ -95,15 +107,23 @@ public class StockModel {
 
 		// Get the data, we don't need metadata
 		
-		Iterator<String> i = root.keys();		
+		if(root.keySet().size() < 2)
+		{
+			System.out.println("Input data is invalid...");
+			return;
+		}
+		
+		Iterator<String> i = root.keys();
+		if(!i.hasNext()) {
+			System.out.println("No data");
+			return;
+		}
 		String data_key = i.next(); // Gets the Data String
 		// In some cases the metadata is in the beginning......
-		while(i.hasNext() && data_key.equals("Meta Data"))
-		{
+		while(i.hasNext() && data_key.equals("Meta Data")) {
 			data_key = i.next();
 		}
 
-		
 		JSONObject tmp = root.getJSONObject(data_key);
 		if(tmp == null) throw new Exception("Malformed JSON Object");
 		// Now we have the JSON-Object for the Data container
