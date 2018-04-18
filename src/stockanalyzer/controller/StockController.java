@@ -12,22 +12,25 @@ import java.util.Properties;
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
 import stockanalyzer.model.StockModel;
+import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.view.StockView;
 
 public class StockController {
 
 	
 	
-	//@TODO make private
+	//TODO make private
 	public static String VANTAGE_API_KEY = "XVXEHHDH9BOTXCBQ";
 	
 	StockView stockView;
 	StockModel stockModel;
+	StockModel secondSymbolStockModel;
 	
 	public StockController() {
 		//Main entrypoint of application
 		
 		stockModel = new StockModel(null); // Create empty StockModel
+		secondSymbolStockModel = new StockModel(null);
 		stockView = new StockView(this);
 		
 		setupView();
@@ -162,6 +165,35 @@ public class StockController {
 	    return true;
     }
 
+	// Pearson Correlation
+	public double CorrelationCalc(ArrayList<StockEntry> list1, ArrayList<StockEntry> list2, String dataseries) {
+	    double sumX= 0.0, sumY = 0.0, sumXX = 0.0, sumYY = 0.0, sumXY = 0.0;
+
+	    int length = Math.min(list1.size(), list2.size());
+	    
+	    if(list1.size() != list2.size())
+	    	System.out.println("Warning! The two lists used for Pearsons Correlation aren't the same size!");
+
+	    for (int i=0; i<length; i++) {
+	    	// TODO !!!
+	        float x = 0;//list1.get(i);
+	        float y = 0;//list2.get(i);
+
+	        sumX+=x;
+	        sumY+=y;
+	        sumXX+=x*x;
+	        sumYY+=y*y;
+	        sumXY+=x*y;
+	    }
+
+        double cov = sumXY / length - sumX*sumY / length / length;
+
+        double sigmaX = Math.sqrt(sumXX / length - sumX*sumX / length / length);
+        double sigmaY = Math.sqrt(sumYY / length - sumY*sumY / length / length);
+
+        return cov/sigmaX/sigmaY;
+	}
+	
 	/**
 	 * Updates the view with the new query gotten from the UI
 	 */
@@ -174,6 +206,12 @@ public class StockController {
 		APICallParams params = new APICallParams(ts, interval, symbol, "JSON", os, VANTAGE_API_KEY);
 		
 		doAPIRequest(params);
+		
+		// TODO do second request IF we have a symbol selected
+		
+		// TODO Calculate Pearsons Correlation if we have both symbols loaded
+		
+		double correlation = 0; // = CorrelationCalc(stockModel.getData(), stockModel.getData());
 		
 		stockView.setModelData(stockModel);
 	}

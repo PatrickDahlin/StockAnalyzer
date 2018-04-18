@@ -293,7 +293,7 @@ public class StockView {
         
         chartPanel = new XChartPanel<XYChart>(chart);
         rightP.add(chartPanel);
-        
+         
         //Adds JPanel & components to 3rd grid
         JPanel textPanel = new JPanel();
         textPanel.setBorder(new EmptyBorder(0,15,15,15));
@@ -309,7 +309,7 @@ public class StockView {
         stockView.setVisible(true);
         stockView.setLocationRelativeTo(null);
 	}
-
+	
     public void setModelData(StockModel model) {
 
     	/*
@@ -374,7 +374,8 @@ public class StockView {
     	
     	if(graphData2.size() == 0)
     		graphData2.add(new Date());
-    		
+
+
     	chart.removeSeries("Stock value");
     	chart.addSeries("Stock value", graphData2, graphData);
     	

@@ -90,6 +90,7 @@ public class Main {
 		
 		StockModel model;
 		
+		
 		try {
 			model = new StockModel(myjson, true);
 		} catch (Exception e) {

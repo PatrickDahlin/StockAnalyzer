@@ -133,7 +133,7 @@ public class StockModel {
 			// And loop it's children to fill in it's values
 			for(String values : child.keySet())
 			{
-				System.out.println("\t" + values + " : " + child.get(values));
+				//System.out.println("\t" + values + " : " + child.get(values));
 				String value = child.getString(values);
 				stockVal.values.add(new TimedValue(values, Float.parseFloat(value)));
 			}
