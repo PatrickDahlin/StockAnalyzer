@@ -11,6 +11,7 @@ import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -67,7 +68,7 @@ public class StockView {
         stockView.setLayout(g);
         
         JPanel leftP = new JPanel();
-        leftP.setPreferredSize(new Dimension(700,800));
+        leftP.setPreferredSize(new Dimension(600,800));
         stockView.add(leftP);
         vcons.gridx = 0;
         vcons.gridy = 0;
@@ -604,6 +605,30 @@ public class StockView {
 
         defaultOptions();
 
+    }
+
+    public void setStartDate(String date){
+	    startDateField.setText(date);
+    }
+
+    public void setEndDate(String date){
+	    endDateField.setText(date);
+    }
+
+    public void startDateCorr(Boolean pizza) {
+	    if(pizza) {
+            startDateField.setBorder(BorderFactory.createLineBorder(Color.gray));
+        } else {
+            startDateField.setBorder(BorderFactory.createLineBorder(Color.red));
+        }
+    }
+
+    public void endDateCorr(Boolean pizza) {
+	    if(pizza) {
+            endDateField.setBorder(BorderFactory.createLineBorder(Color.gray));
+        } else {
+            endDateField.setBorder(BorderFactory.createLineBorder(Color.red));
+        }
     }
 
 }

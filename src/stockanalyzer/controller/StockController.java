@@ -29,6 +29,8 @@ public class StockController {
 	StockView stockView;
 	StockModel stockModel;
 	StockModel secondSymbolStockModel;
+
+	private String gDate;
 	
 	public StockController() {
 		//Main entrypoint of application
@@ -101,11 +103,7 @@ public class StockController {
 	}
 
 	private void setupView() {
-		stockView.addQueryListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			doQuery();
-		}});
+		stockView.addQueryListener(e -> doQuery());
 
 		stockView.startDateFocusLoss(new FocusListener() {
             @Override
@@ -117,9 +115,10 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getStartDateField())){
-                    System.out.println("True");
+                    stockView.setStartDate(gDate);
+                    stockView.startDateCorr(true);
                 } else {
-                    System.out.println("False");
+                    stockView.startDateCorr(false);
                 }
 
             }
@@ -135,9 +134,10 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getEndDateField())){
-                    System.out.println("True");
+                    stockView.setEndDate(gDate);
+                    stockView.endDateCorr(true);
                 } else {
-                    System.out.println("False");
+                    stockView.endDateCorr(false);
                 }
 
             }
@@ -147,14 +147,19 @@ public class StockController {
 	//Checks if Date is a valid date
 	private boolean validateDate(String date){
 
+	    if(date.trim().equals("")){
+	        gDate = "";
+	        return true;
+        }
+
 	    //Assuming date format is DD.MM.YYYY
-
 	    date = date.trim();
-        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YYYY");
-
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateFormat.setLenient(false);
 
 	    try {
             Date dateParse = dateFormat.parse(date);
+            gDate = date;
         } catch (ParseException e){
 	        return false;
         }
