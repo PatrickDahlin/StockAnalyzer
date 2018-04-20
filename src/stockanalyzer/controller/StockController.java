@@ -205,7 +205,12 @@ public class StockController {
 		String interval = stockView.getInterval();
 		String symbols[] = stockView.getSymbol();
 		String os = stockView.getOutputSize();
-		
+
+		if (symbols[0].trim().equals("") && symbols[1].trim().equals("")){
+		    System.out.println("No Symbols chosen!");
+		    return;
+        }
+
 		APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
         APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
 
