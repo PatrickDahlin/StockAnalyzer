@@ -390,6 +390,7 @@ public class StockView {
         options.clear();
 
         options.addAll(Arrays.asList(symbols));
+        options.add(0,""); //Adds empty symbol element
         setComboBoxOptions(smblBox, options);
         smblBox.setEnabled(true);
 
