@@ -261,6 +261,7 @@ public class StockView {
         cons.gridx = 0;
         cons.gridy = 10;
         pearsonButton = new JButton("Pearson Correlation");
+        cons.weightx = 0;
         cons.insets = new Insets(14,0,0,10);
         stockLayout.setConstraints(pearsonButton, cons);
         compPanel.add(pearsonButton);
