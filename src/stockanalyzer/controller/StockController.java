@@ -203,12 +203,14 @@ public class StockController {
 	private void doQuery() {	
 		String ts = stockView.getTimeSeries();
 		String interval = stockView.getInterval();
-		String symbol = stockView.getSymbol();
+		String symbols[] = stockView.getSymbol();
 		String os = stockView.getOutputSize();
 		
-		APICallParams params = new APICallParams(ts, interval, symbol, "JSON", os, VANTAGE_API_KEY);
-		
-		doAPIRequest(params);
+		APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+        APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+
+		doAPIRequest(params1);
+		//doAPIRequest(params2);
 		
 		// TODO do second request IF we have a symbol selected
 		

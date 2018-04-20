@@ -567,8 +567,11 @@ public class StockView {
     /**
      * Get the selected Symbol
      */
-	public String getSymbol() {
-		return smblBox.getSelectedItem().toString();
+	public String[] getSymbol() {
+	    String[] symbols = new String[2];
+	    symbols[0] = smblBox.getSelectedItem().toString();
+	    symbols[1] = smbl2Box.getSelectedItem().toString();
+		return symbols;
 	}
 
     public String getStartDateField() {
