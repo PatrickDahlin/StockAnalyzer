@@ -544,7 +544,7 @@ public class StockView {
      * Gets the currently selected TimeSeries
      */
     public String getTimeSeries() {
-    	return timSerBox.getSelectedItem().toString();
+    	return timSerBox.getSelectedItem().toString().trim();
     }
     
     /**
@@ -553,7 +553,7 @@ public class StockView {
     public String getInterval() {
     	if(timIntBox.getItemCount() == 0) return "1min";
     	
-    	return timIntBox.getSelectedItem().toString();
+    	return timIntBox.getSelectedItem().toString().trim();
     }
     
     /**
@@ -562,7 +562,7 @@ public class StockView {
     public String getOutputSize() {
     	if(outSizBox.getItemCount() == 0) return "FULL";
     	
-    	return outSizBox.getSelectedItem().toString();
+    	return outSizBox.getSelectedItem().toString().trim();
     }
    
     /**
@@ -576,11 +576,11 @@ public class StockView {
 	}
 
     public String getStartDateField() {
-        return startDateField.getText();
+        return startDateField.getText().trim();
     }
 
     public String getEndDateField() {
-        return endDateField.getText();
+        return endDateField.getText().trim();
     }
 
     public void setSymbols(String[] smbl){
@@ -589,7 +589,7 @@ public class StockView {
 
     }
 
-    public  void setInterval(String[] interval){
+    public void setInterval(String[] interval){
 
         intervals = interval;
 
@@ -644,7 +644,7 @@ public class StockView {
 
     public String getKey(){
 
-	    return apiKeyField.getText();
+	    return apiKeyField.getText().trim();
 
     }
 
