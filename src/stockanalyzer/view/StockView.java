@@ -612,6 +612,12 @@ public class StockView {
 
     }
 
+    public void setApiKeyField(String key) {
+
+	    apiKeyField.setText(key);
+
+    }
+
     public void setStartDate(String date){
 	    startDateField.setText(date);
     }
@@ -634,6 +640,12 @@ public class StockView {
         } else {
             endDateField.setBorder(BorderFactory.createLineBorder(Color.red));
         }
+    }
+
+    public String getKey(){
+
+	    return apiKeyField.getText();
+
     }
 
 }

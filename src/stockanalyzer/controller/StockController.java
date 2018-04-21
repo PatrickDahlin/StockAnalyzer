@@ -43,8 +43,7 @@ public class StockController {
 		loadIni();
 	}
 	
-	private void loadIni()
-	{
+	private void loadIni() {
 		Hashtable<String, String[]> ini = new Hashtable<String, String[]>();
 		
 		// TODO check for spaces
@@ -74,7 +73,7 @@ public class StockController {
 		}
 		
 		// TODO demo key doesn't return any data anymore
-		//VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
+		VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
 		String[] time_intervals = ini.getOrDefault("TIME_INTERVAL", new String[] {"1min","5min","15min","30min","60min"});
 		String[] output_size = ini.getOrDefault("OUTPUT_SIZE", new String[] {"compact","full"});
 		String[] time_series = ini.getOrDefault("TIME_SERIES", new String[] {"TIME_SERIES_INTRADAY",
@@ -92,6 +91,7 @@ public class StockController {
         stockView.setOutput(output_size);
         stockView.setSymbols(symbols);
         stockView.setSeries(time_series);
+        stockView.setApiKeyField(VANTAGE_API_KEY);
 
 		/* Dis is data
 		 TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
@@ -205,21 +205,30 @@ public class StockController {
 		String interval = stockView.getInterval();
 		String symbols[] = stockView.getSymbol();
 		String os = stockView.getOutputSize();
+		VANTAGE_API_KEY = stockView.getKey();
 
 		if (symbols[0].trim().equals("") && symbols[1].trim().equals("")){
 		    System.out.println("No Symbols chosen!");
 		    return;
         }
 
-		APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
-        APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
-
-		doAPIRequest(params1);
-		//doAPIRequest(params2);
-		
-		// TODO do second request IF we have a symbol selected
-		
-		// TODO Calculate Pearsons Correlation if we have both symbols loaded
+        if(!(symbols[0].trim().equals("")) && symbols[1].trim().equals("")){
+            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+            doAPIRequest(params1);
+        } else if(symbols[0].trim().equals("") && !(symbols[1].trim().equals(""))){
+            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+            doAPIRequest(params2);
+        } else if(!(symbols[0].trim().equals("") && symbols[1].trim().equals(""))){
+            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+            /*
+            doAPIRequest(params1);
+            doAPIRequest(params2);
+            */
+            // TODO Get screamed at by Patrick for making many if's
+            // TODO Do second request IF we have a symbol selected
+            // TODO Calculate Pearsons Correlation if we have both symbols loaded
+        }
 		
 		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
 		
