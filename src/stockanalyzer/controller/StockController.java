@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
@@ -221,10 +222,17 @@ public class StockController {
         } else if(!(symbols[0].trim().equals("") && symbols[1].trim().equals(""))){
             APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
             APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+
             /*
             doAPIRequest(params1);
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException e){
+                //;(
+            }
             doAPIRequest(params2);
             */
+
             // TODO Get screamed at by Patrick for making many if's
             // TODO Do second request IF we have a symbol selected
             // TODO Calculate Pearsons Correlation if we have both symbols loaded
