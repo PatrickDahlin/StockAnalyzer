@@ -33,9 +33,10 @@ public class StockController {
 
 	public StockController() {
 		//Main entrypoint of application
-		
-		stockModel = new StockModel(); // Create empty StockModel
-		secondSymbolStockModel = null;
+
+        //Commented so they default to null
+		//stockModel = new StockModel(); // Create empty StockModel
+		//secondSymbolStockModel = new StockModel();
 		stockView = new StockView(this);
 		
 		setupView();
@@ -213,7 +214,9 @@ public class StockController {
 		    return;
         }
 
-        System.out.println(secondSymbolStockModel == null);
+        //Set to null
+        stockModel = null;
+        secondSymbolStockModel = null;
 
 		if(doubleQuery)
 		{
