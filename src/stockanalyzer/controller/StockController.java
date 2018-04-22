@@ -213,6 +213,9 @@ public class StockController {
 		    return;
         }
 
+        stockModel = null;
+		secondSymbolStockModel = null;
+
         if(!(symbols[0].trim().equals("")) && symbols[1].trim().equals("")){
             APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
             doAPIRequest(params1);
@@ -228,7 +231,7 @@ public class StockController {
             try {
                 Thread.sleep(1000);
             } catch(InterruptedException e){
-                //;(
+
             }
             doAPIRequest(params2);
             */
@@ -240,7 +243,7 @@ public class StockController {
 		
 		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
 		
-		stockView.setModelData(stockModel);
+		stockView.setModelData(stockModel, secondSymbolStockModel);
 	}
 	
 	/**
@@ -251,7 +254,12 @@ public class StockController {
 
 		try {
 			// Second parameter is either sorted/unsorted
-			stockModel = new StockModel(myjson, true);
+			if(stockModel==null){
+			    stockModel = new StockModel(myjson, true);
+            } else {
+			    secondSymbolStockModel = new StockModel(myjson, true);
+            }
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			// @TODO this would be nice, not too important

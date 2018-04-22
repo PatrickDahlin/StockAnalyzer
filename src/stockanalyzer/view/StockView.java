@@ -309,7 +309,7 @@ public class StockView {
         stockView.setLocationRelativeTo(null);
 	}
 	
-    public void setModelData(StockModel model) {
+    public void setModelData(StockModel model, StockModel model2) {
 
     	/*
     	 * Formatting input data to output to UI
