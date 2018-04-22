@@ -121,7 +121,6 @@ public class StockController {
                 } else {
                     System.out.println("False");
                 }
-
             }
         });
 
@@ -150,11 +149,14 @@ public class StockController {
 	    //Assuming date format is DD.MM.YYYY
 
 	    date = date.trim();
-        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YYYY");
-
-
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        
+        dateFormat.setLenient(false);
+        
 	    try {
             Date dateParse = dateFormat.parse(date);
+
+            //System.out.println("Parsing of date {"+date+"} turned into {"+dateParse+"}");
         } catch (ParseException e){
 	        return false;
         }
@@ -210,8 +212,24 @@ public class StockController {
 		// TODO Calculate Pearsons Correlation if we have both symbols loaded
 		
 		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
-		
-		stockView.setModelData(stockModel);
+
+		if(validateDate(stockView.getStartDateField()) && validateDate(stockView.getEndDateField()))
+		{
+			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+
+		    try {
+	            Date startDate = dateFormat.parse(stockView.getStartDateField());
+	            Date endDate = dateFormat.parse(stockView.getEndDateField());
+
+				StockModel m = filterModelByTimeInterval(stockModel, startDate, endDate);
+				
+				stockView.setModelData(m);
+		    } catch (ParseException e){}
+			
+		}
+		else
+			stockView.setModelData(stockModel);
 	}
 	
 	/**
@@ -240,8 +258,9 @@ public class StockController {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 		
-		for(StockEntry entry : tempData)
+		for(int i=0; i < tempData.size(); i++)
 		{
+			StockEntry entry = tempData.get(i);
 			Date entryDate;
 			
 			
@@ -253,8 +272,10 @@ public class StockController {
 				// Make sure date is ok
 				if(!d.after(start) || !d.before(end))
 				{
+					//System.out.println("Time: "+d+" is not within the range "+start+" and "+ end);
 					// Remove this entry, it's outside timespan
 					tempData.remove(entry);
+					i--;
 				}
 				
 			} catch (ParseException e) {
@@ -264,14 +285,16 @@ public class StockController {
 					// Make sure date is ok
 					if(!d.after(start) || !d.before(end))
 					{
+						//System.out.println("Time: "+d+" is not within the range "+start+" and "+ end);
 						// Remove this entry, it's outside timespan
 						tempData.remove(entry);
+						i--;
 					}
 				
 				} catch(ParseException e2) {
-					e2.printStackTrace();
+					//e2.printStackTrace();
 				}
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			
 		}
