@@ -316,7 +316,7 @@ public class StockController {
 			
 		}
 		
-		return new StockModel(tempData);
+		return new StockModel(tempData,model.getSymbol());
 	}
 	
 }
