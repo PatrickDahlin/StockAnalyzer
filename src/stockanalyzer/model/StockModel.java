@@ -47,6 +47,16 @@ public class StockModel {
 	private ArrayList<StockEntry> data;
 	// ---
 	
+	public StockModel()
+	{
+		data = new ArrayList<StockEntry>();
+	}
+	
+	public StockModel(ArrayList<StockEntry> data)
+	{
+		this.data = data;
+	}
+	
 	// Create a unsorted model
 	public StockModel(JSONObject root) { this(root, false); }
 	
@@ -66,6 +76,11 @@ public class StockModel {
 		
 		if(!sorted) return;
 		
+		sort();
+	}
+	
+	private void sort()
+	{
 		Collections.sort(data, new Comparator<StockEntry>() {
 	        @Override
 	        public int compare(StockEntry entry1, StockEntry entry2)
