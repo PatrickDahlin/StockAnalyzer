@@ -11,7 +11,6 @@ import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -364,47 +363,97 @@ public class StockView {
             }
 
     	} else {
-            ArrayList<StockEntry> v2 = model2.getData();
+    	    ArrayList<StockEntry> v2 = model2.getData();
             graphData3 = new ArrayList<>();
             graphData4 = new ArrayList<>();
 
-            for(int i = 0; i != v.size(); i++) {
-                for (int k = 0; k != v.get(i).values.size(); k++) {
+            ArrayList<StockEntry> smallestList = v.size()<v2.size()? v:v2;
+            ArrayList<StockEntry> largestList = v.size()>v2.size()? v:v2;
+
+            for(int i = 0; i != largestList.size(); i++) {
+                ArrayList<StockEntry> largestValuesSize;
+
+                try{
+                    largestValuesSize = v.get(i).values.size()>v2.get(i).values.size()? v:v2;
+                } catch (IndexOutOfBoundsException e){
+                    largestValuesSize = largestList;
+                }
+
+                for (int k = 0; k != largestValuesSize.get(i).values.size(); k++) {
                     // We're checking the first character in the title(the index) against the index in the combobox
                     // API **should** always return same index for same value and our combo has items in the correct order
-                    if (Integer.parseInt(v.get(i).values.get(k).title.substring(0, 1)) == (datSerBox.getSelectedIndex() + 1)) {
+                    if (Integer.parseInt(largestValuesSize.get(i).values.get(k).title.substring(0, 1)) == (datSerBox.getSelectedIndex() + 1)) {
+
+                        String value1;
+                        String value2;
+
+                        try{
+                            value1 = Float.toString(v.get(i).values.get(k).value);
+                            graphData.add(Float.parseFloat(value1));
+                        }catch (IndexOutOfBoundsException e){
+                            value1 = "N/A";
+                        }
+
+                        try{
+                            value2 = Float.toString(v2.get(i).values.get(k).value);
+                            graphData3.add(Float.parseFloat(value2));
+                        }catch (IndexOutOfBoundsException e){
+                            value2 = "N/A";
+                        }
 
                         text.append("\n");
                         text.append("Date: ");
-                        text.append(v.get(i).time);
+                        try{
+                            text.append(v2.get(i).time);
+                        } catch(IndexOutOfBoundsException e){
+                            text.append(v.get(i).time);
+                        }
                         text.append(":\t"+model.getSymbol()+": ");
-                        text.append(v.get(i).values.get(k).value + "\t"+model2.getSymbol()+": ");
-                        graphData.add(v.get(i).values.get(k).value);
-                        text.append(v2.get(i).values.get(k).value);
-                        graphData3.add(v2.get(i).values.get(k).value);
+                        text.append(value1 + "\t"+model2.getSymbol()+": ");
+                        text.append(value2+"");
 
                         try {
-                            Date d = df.parse(v.get(i).time);
-                            Date d2 = df.parse(v2.get(i).time);
-                            graphData2.add(d);
-                            graphData4.add(d2);
+
+                            try {
+                                Date d = df.parse(v.get(i).time);
+                                graphData2.add(d);
+                            } catch(IndexOutOfBoundsException e){
+
+                            }
+
+                            try {
+                                Date d2 = df.parse(v2.get(i).time);
+                                graphData4.add(d2);
+                            } catch(IndexOutOfBoundsException e){
+
+                            }
+
                         } catch (ParseException e) {
                             try {
-                                Date d = df2.parse(v.get(i).time);
-                                Date d2 = df2.parse(v2.get(i).time);
-                                graphData2.add(d);
-                                graphData4.add(d2);
+
+                                try {
+                                    Date d = df2.parse(v.get(i).time);
+                                    graphData2.add(d);
+                                } catch(IndexOutOfBoundsException e2){
+
+                                }
+
+                                try {
+                                    Date d2 = df2.parse(v2.get(i).time);
+                                    graphData4.add(d2);
+                                } catch(IndexOutOfBoundsException e2){
+
+                                }
+
                             } catch (ParseException e2) {
                                 e2.printStackTrace();
                                 System.out.println("Failed to parse date time");
                                 return;
                             }
                         }
-
                     }
                 }
             }
-
         }
 
     	textField.setText(text.toString());
@@ -418,6 +467,7 @@ public class StockView {
     		graphData2.add(new Date());
 
     	chart.removeSeries("Symbol 1");
+
     	chart.addSeries("Symbol 1", graphData2, graphData);
 
         if(graphData3 != null && graphData4 != null){
