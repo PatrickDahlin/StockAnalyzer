@@ -280,7 +280,6 @@ public class StockView {
         // Need these to set the types of the series correctly, just empty data until update
         ArrayList<Date> a = new ArrayList<Date>(1); a.add(new Date()); // We need 1 element for chart not to crash :/
         ArrayList<Float> b = new ArrayList<Float>(1); b.add(0f);
-        chart.addSeries("Stock value", a, b);
         
         chart.getStyler().setLegendPosition(LegendPosition.InsideNE); // Puts legend inside chart for smaller padding
         chart.getStyler().setChartBackgroundColor(new Color(0,0,0,0));
@@ -319,7 +318,8 @@ public class StockView {
     	ArrayList<StockEntry> v = model.getData();
     	ArrayList<Float> graphData = new ArrayList<Float>();
     	ArrayList<Date> graphData2 = new ArrayList<Date>();
-
+        ArrayList<Float> graphData3 = null;
+        ArrayList<Date> graphData4 = null;
     	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -365,8 +365,8 @@ public class StockView {
 
     	} else {
             ArrayList<StockEntry> v2 = model2.getData();
-            ArrayList<Float> graphData3 = new ArrayList<Float>();
-            ArrayList<Date> graphData4 = new ArrayList<Date>();
+            graphData3 = new ArrayList<>();
+            graphData4 = new ArrayList<>();
 
             for(int i = 0; i != v.size(); i++) {
                 for (int k = 0; k != v.get(i).values.size(); k++) {
@@ -417,10 +417,21 @@ public class StockView {
     	if(graphData2.size() == 0)
     		graphData2.add(new Date());
 
+    	chart.removeSeries("Symbol 1");
+    	chart.addSeries("Symbol 1", graphData2, graphData);
 
-    	chart.removeSeries("Stock value");
-    	chart.addSeries("Stock value", graphData2, graphData);
-    	
+        if(graphData3 != null && graphData4 != null){
+            if(graphData3.size() == 0)
+                graphData3.add(0f);
+
+            if(graphData4.size() == 0)
+                graphData4.add(new Date());
+
+            chart.removeSeries("Symbol 2");
+            chart.addSeries("Symbol 2", graphData4, graphData3);
+
+        }
+
     	// Repaint the chart
     	chartPanel.revalidate();
     	chartPanel.repaint();
