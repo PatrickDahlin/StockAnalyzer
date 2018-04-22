@@ -309,7 +309,8 @@ public class StockView {
         stockView.setLocationRelativeTo(null);
 	}
 	
-    public void setModelData(StockModel model, StockModel model2) {
+
+	public void setModelData(StockModel model, StockModel model2) {
 
     	/*
     	 * Formatting input data to output to UI
@@ -582,6 +583,13 @@ public class StockView {
     public void addQueryListener(ActionListener actionListener) {
     	queryButton.addActionListener(actionListener);
     }
+    
+    /**
+     * Add a listener for Pearsons Correlation calculation button
+     */
+    public void addPearsonCalcListener(ActionListener actionListener) {
+    	pearsonButton.addActionListener(actionListener);
+    }
 
     /**
      * Gets the currently selected TimeSeries
@@ -597,6 +605,10 @@ public class StockView {
     	if(timIntBox.getItemCount() == 0) return "1min";
     	
     	return timIntBox.getSelectedItem().toString().trim();
+    }
+    
+    public String getDataSeries() {
+    	return String.valueOf(datSerBox.getSelectedIndex()+1);
     }
     
     /**
@@ -642,6 +654,10 @@ public class StockView {
 
         outputs = output;
 
+    }
+    
+    public void setPearsonCorrelation(double value) {
+    	pearsonField.setText(String.valueOf(value));
     }
 
     public void setSeries(String[] series){

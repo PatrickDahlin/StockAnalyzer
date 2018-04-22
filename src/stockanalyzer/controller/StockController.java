@@ -46,8 +46,6 @@ public class StockController {
 	private void loadIni() {
 		Hashtable<String, String[]> ini = new Hashtable<String, String[]>();
 		
-		// TODO check for spaces
-		
 		// Read in the ini
 		Properties props = new Properties();
 		try {
@@ -72,7 +70,6 @@ public class StockController {
 			// Something went wrong
 		}
 		
-		// TODO demo key doesn't return any data anymore
 		VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
 		String[] time_intervals = ini.getOrDefault("TIME_INTERVAL", new String[] {"1min","5min","15min","30min","60min"});
 		String[] output_size = ini.getOrDefault("OUTPUT_SIZE", new String[] {"compact","full"});
@@ -85,7 +82,6 @@ public class StockController {
 																				"TIME_SERIES_MONTHLY_ADJUSTED"});
 		String[] symbols = ini.getOrDefault("SYMBOL", new String[] {"MSFT","GOOG"});
 
-		// TODO Load in all this data into view 
 
         stockView.setInterval(time_intervals);
         stockView.setOutput(output_size);
@@ -93,13 +89,6 @@ public class StockController {
         stockView.setSeries(time_series);
         stockView.setApiKeyField(VANTAGE_API_KEY);
 
-		/* Dis is data
-		 TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
-		 OUTPUT_SIZE = compact, full,
-		 TIME_SERIES = TIME_SERIES_INTRADAY, TIME_SERIES_DAILY, TIME_SERIES_DAILY_ADJUSTED, TIME_SERIES_WEEKLY, TIME_SERIES_WEEKLY_ADJUSTED, TIME_SERIES_MONTHLY, TIME_SERIES_MONTHLY_ADJUSTED,
-		 API_KEY = demo,
-		 SYMBOL = A, AAPL, C, GOOG, HOG, HPQ, INTC, KO, LUV, MMM, MSFT, T, TGT, TXN, WMT,
-		*/
 	}
 
 	private void setupView() {
@@ -141,6 +130,13 @@ public class StockController {
 
             }
         });
+		
+		stockView.addPearsonCalcListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				stockView.setPearsonCorrelation(CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData(), stockView.getDataSeries()));
+			}
+		});
 	}
 
 	//Checks if Date is a valid date
