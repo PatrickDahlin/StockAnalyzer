@@ -36,8 +36,8 @@ public class StockController {
 	public StockController() {
 		//Main entrypoint of application
 		
-		stockModel = new StockModel(null); // Create empty StockModel
-		secondSymbolStockModel = new StockModel(null);
+		stockModel = new StockModel(); // Create empty StockModel
+		secondSymbolStockModel = new StockModel();
 		stockView = new StockView(this);
 		
 		setupView();
@@ -259,6 +259,53 @@ public class StockController {
 			return;
 		}
 		
+	}
+
+	
+	private StockModel filterModelByTimeInterval(StockModel model, Date start, Date end)
+	{
+		
+		ArrayList<StockEntry> tempData = model.getData();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
+		
+		for(StockEntry entry : tempData)
+		{
+			Date entryDate;
+			
+			
+			// We got 2 different timeformats possible, try them both
+			
+			try {
+				Date d = df.parse(entry.time);
+				
+				// Make sure date is ok
+				if(!d.after(start) || !d.before(end))
+				{
+					// Remove this entry, it's outside timespan
+					tempData.remove(entry);
+				}
+				
+			} catch (ParseException e) {
+				try {
+					Date d = df2.parse(entry.time);
+					
+					// Make sure date is ok
+					if(!d.after(start) || !d.before(end))
+					{
+						// Remove this entry, it's outside timespan
+						tempData.remove(entry);
+					}
+				
+				} catch(ParseException e2) {
+					e2.printStackTrace();
+				}
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return new StockModel(tempData);
 	}
 	
 }
