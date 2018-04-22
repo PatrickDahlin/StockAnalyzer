@@ -43,18 +43,22 @@ public class StockModel {
 	}
 	
 	
+	
 	// The actual model content is kept in this array
+	private String symbol;
 	private ArrayList<StockEntry> data;
 	// ---
 	
 	public StockModel()
 	{
 		data = new ArrayList<StockEntry>();
+		symbol = "";
 	}
 	
-	public StockModel(ArrayList<StockEntry> data)
+	public StockModel(ArrayList<StockEntry> data, String symbol)
 	{
 		this.data = data;
+		this.symbol = symbol;
 	}
 	
 	// Create a unsorted model
@@ -94,6 +98,11 @@ public class StockModel {
 	public ArrayList<StockEntry> getData()
 	{
 		return data;
+	}
+	
+	public String getSymbol()
+	{
+		return symbol;
 	}
 	
 	// Parse JSON Data gotten from API
@@ -136,8 +145,11 @@ public class StockModel {
 		String data_key = i.next(); // Gets the Data String
 		// In some cases the metadata is in the beginning......
 		while(i.hasNext() && data_key.equals("Meta Data")) {
-			data_key = i.next();
+			System.out.println("!!!!!!" + data_key);
+			data_key = i.next();	
 		}
+		
+		findSymbolInObj(root.getJSONObject("Meta Data"));
 
 		JSONObject tmp = root.getJSONObject(data_key);
 		if(tmp == null) throw new Exception("Malformed JSON Object");
@@ -167,6 +179,32 @@ public class StockModel {
 			data.add(stockVal);
 		}
 		
+	}
+	
+	private void findSymbolInObj(JSONObject obj)
+	{
+		if(obj == null) {
+			System.out.println("Couldn't find symbol in JSON!");
+			return;
+		}
+		
+		// Loop all keys and find key containing symbol, an index should preceed this name but we don't know for sure it'll stay constant
+		String sym = "";
+		for(String content : obj.keySet())
+		{
+			if(content.contains("Symbol")) // Look for the name Symbol
+			{
+				sym = obj.getString(content);
+				break;
+			}
+		}
+		
+		if(sym == null) {
+			System.out.println("Couldn't find symbol in JSON!");
+			return;
+		}
+		
+		symbol = sym;
 	}
 
 }
