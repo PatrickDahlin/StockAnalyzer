@@ -316,11 +316,10 @@ public class StockView {
     	 */
     	
     	StringBuilder text = new StringBuilder();
-    	
     	ArrayList<StockEntry> v = model.getData();
     	ArrayList<Float> graphData = new ArrayList<Float>();
     	ArrayList<Date> graphData2 = new ArrayList<Date>();
-    	
+
     	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -332,38 +331,42 @@ public class StockView {
     	{
     		text.append("\nNo data avaliable");
     	}
-    	for(StockEntry entry : v)
-    	{
-    		for(TimedValue val : entry.values)
-    		{
-    			// We're checking the first character in the title(the index) against the index in the combobox
-    			// API **should** always return same index for same value and our combo has items in the correct order
-    			if(Integer.parseInt(val.title.substring(0, 1)) == (datSerBox.getSelectedIndex()+1))
-    			{
-    				text.append("\n");
-    				text.append("Date: ");
-    				text.append(entry.time);
-    				text.append(": ");
-    				text.append(val.value);
-    				graphData.add(val.value);
-    				
-    				try {
-    					Date d = df.parse(entry.time);
-						graphData2.add(d);
-					} catch (ParseException e) {
-						try {
-							Date d = df2.parse(entry.time);
-							graphData2.add(d);
-						}catch(ParseException e2)
-						{
-							e2.printStackTrace();
-							System.out.println("Failed to parse date time");
-							return;
-						}
-					}
-    			}
-    		}
-    	}
+
+    	if(model2 == null){
+
+            for(StockEntry entry : v) {
+                for (TimedValue val : entry.values) {
+                    // We're checking the first character in the title(the index) against the index in the combobox
+                    // API **should** always return same index for same value and our combo has items in the correct order
+                    if (Integer.parseInt(val.title.substring(0, 1)) == (datSerBox.getSelectedIndex() + 1)) {
+                        text.append("\n");
+                        text.append("Date: ");
+                        text.append(entry.time);
+                        text.append(":\t");
+                        text.append(val.value);
+                        graphData.add(val.value);
+
+                        try {
+                            Date d = df.parse(entry.time);
+                            graphData2.add(d);
+                        } catch (ParseException e) {
+                            try {
+                                Date d = df2.parse(entry.time);
+                                graphData2.add(d);
+                            } catch (ParseException e2) {
+                                e2.printStackTrace();
+                                System.out.println("Failed to parse date time");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+    	} else {
+            ArrayList<StockEntry> v2 = model2.getData();
+        }
+
     	textField.setText(text.toString());
     	textField.setCaretPosition(0);
     	
