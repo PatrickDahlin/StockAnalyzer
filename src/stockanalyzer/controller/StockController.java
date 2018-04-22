@@ -33,9 +33,10 @@ public class StockController {
 
 	public StockController() {
 		//Main entrypoint of application
-		
-		stockModel = new StockModel(); // Create empty StockModel
-		secondSymbolStockModel = new StockModel();
+
+        //Commented so they default to null
+		//stockModel = new StockModel(); // Create empty StockModel
+		//secondSymbolStockModel = new StockModel();
 		stockView = new StockView(this);
 		
 		setupView();
@@ -213,6 +214,10 @@ public class StockController {
 		    return;
         }
 
+        //Set to null
+        stockModel = null;
+        secondSymbolStockModel = null;
+
 		if(doubleQuery)
 		{
 			stockModel = doAPIRequest(params1);
@@ -240,13 +245,19 @@ public class StockController {
 	            Date endDate = dateFormat.parse(stockView.getEndDateField());
 
 				StockModel m = filterModelByTimeInterval(stockModel, startDate, endDate);
-				
-				stockView.setModelData(m);
+				StockModel m2 = null;
+
+				if (secondSymbolStockModel != null) {
+				    m2 = filterModelByTimeInterval(secondSymbolStockModel, startDate, endDate);
+                }
+
+				stockView.setModelData(m, m2);
+
 		    } catch (ParseException e){}
 			
 		}
 		else
-			stockView.setModelData(stockModel);
+			stockView.setModelData(stockModel, secondSymbolStockModel);
 	}
 	
 	/**
