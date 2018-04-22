@@ -31,8 +31,6 @@ public class StockController {
 	StockModel stockModel;
 	StockModel secondSymbolStockModel;
 
-	private String gDate;
-	
 	public StockController() {
 		//Main entrypoint of application
 		
@@ -116,12 +114,11 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getStartDateField())){
-                    stockView.setStartDate(gDate);
+                    //stockView.setStartDate(gDate);
                     stockView.startDateCorr(true);
                 } else {
                     stockView.startDateCorr(false);
                 }
-
             }
         });
 
@@ -135,7 +132,7 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getEndDateField())){
-                    stockView.setEndDate(gDate);
+                    //stockView.setEndDate(gDate);
                     stockView.endDateCorr(true);
                 } else {
                     stockView.endDateCorr(false);
@@ -148,19 +145,15 @@ public class StockController {
 	//Checks if Date is a valid date
 	private boolean validateDate(String date){
 
-	    if(date.trim().equals("")){
-	        gDate = "";
-	        return true;
-        }
-
 	    //Assuming date format is DD.MM.YYYY
 	    date = date.trim();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");       
         dateFormat.setLenient(false);
-
+        
 	    try {
             Date dateParse = dateFormat.parse(date);
-            gDate = date;
+
+            //System.out.println("Parsing of date {"+date+"} turned into {"+dateParse+"}");
         } catch (ParseException e){
 	        return false;
         }
@@ -208,63 +201,68 @@ public class StockController {
 		String os = stockView.getOutputSize();
 		VANTAGE_API_KEY = stockView.getKey();
 
-		if (symbols[0].trim().equals("") && symbols[1].trim().equals("")){
+		boolean symbolAempty = symbols[0].trim().equals("");
+		boolean symbolBempty = symbols[1].trim().equals("");
+		boolean doubleQuery = !symbolAempty && !symbolBempty;
+		
+		APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+        APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+		
+		if (symbolAempty && symbolBempty){
 		    System.out.println("No Symbols chosen!");
 		    return;
         }
 
-        stockModel = null;
-		secondSymbolStockModel = null;
+		if(doubleQuery)
+		{
+			stockModel = doAPIRequest(params1);
+			try{ Thread.sleep(1000); }catch(Exception e) {}
+			secondSymbolStockModel = doAPIRequest(params2);
+		}
+		else
+		{
+			if(symbolAempty)
+				stockModel = doAPIRequest(params2);
+			else
+				stockModel = doAPIRequest(params1);
+		}
 
-        if(!(symbols[0].trim().equals("")) && symbols[1].trim().equals("")){
-            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
-            doAPIRequest(params1);
-        } else if(symbols[0].trim().equals("") && !(symbols[1].trim().equals(""))){
-            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
-            doAPIRequest(params2);
-        } else if(!(symbols[0].trim().equals("") && symbols[1].trim().equals(""))){
-            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
-            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+		// TODO Calculate Pearsons Correlation if we have both symbols loaded, On buttonpress of Pearsons correlation button
 
-            /*
-            doAPIRequest(params1);
-            try {
-                Thread.sleep(1000);
-            } catch(InterruptedException e){
-
-            }
-            doAPIRequest(params2);
-            */
-
-            // TODO Get screamed at by Patrick for making many if's
-            // TODO Do second request IF we have a symbol selected
-            // TODO Calculate Pearsons Correlation if we have both symbols loaded
-        }
 		
-		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
-		
-		stockView.setModelData(stockModel, secondSymbolStockModel);
+		if(validateDate(stockView.getStartDateField()) && validateDate(stockView.getEndDateField()))
+		{
+			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+
+		    try {
+	            Date startDate = dateFormat.parse(stockView.getStartDateField());
+	            Date endDate = dateFormat.parse(stockView.getEndDateField());
+
+				StockModel m = filterModelByTimeInterval(stockModel, startDate, endDate);
+				
+				stockView.setModelData(m);
+		    } catch (ParseException e){}
+			
+		}
+		else
+			stockView.setModelData(stockModel);
 	}
 	
 	/**
 	 * Calls the API that does the call and receives the data
 	 */
-	public void doAPIRequest(APICallParams params) {
+	public StockModel doAPIRequest(APICallParams params) {
 		JSONObject myjson = StockAPI.getRequest(params);
 
 		try {
 			// Second parameter is either sorted/unsorted
-			if(stockModel==null){
-			    stockModel = new StockModel(myjson, true);
-            } else {
-			    secondSymbolStockModel = new StockModel(myjson, true);
-            }
-
+			return new StockModel(myjson, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// @TODO this would be nice, not too important
 			// view.showError("Internal Error parsing data");
-			return;
+			return null;
 		}
 		
 	}
@@ -277,8 +275,9 @@ public class StockController {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 		
-		for(StockEntry entry : tempData)
+		for(int i=0; i < tempData.size(); i++)
 		{
+			StockEntry entry = tempData.get(i);
 			Date entryDate;
 			
 			
@@ -290,8 +289,10 @@ public class StockController {
 				// Make sure date is ok
 				if(!d.after(start) || !d.before(end))
 				{
+					//System.out.println("Time: "+d+" is not within the range "+start+" and "+ end);
 					// Remove this entry, it's outside timespan
 					tempData.remove(entry);
+					i--;
 				}
 				
 			} catch (ParseException e) {
@@ -301,14 +302,16 @@ public class StockController {
 					// Make sure date is ok
 					if(!d.after(start) || !d.before(end))
 					{
+						//System.out.println("Time: "+d+" is not within the range "+start+" and "+ end);
 						// Remove this entry, it's outside timespan
 						tempData.remove(entry);
+						i--;
 					}
 				
 				} catch(ParseException e2) {
-					e2.printStackTrace();
+					//e2.printStackTrace();
 				}
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			
 		}
