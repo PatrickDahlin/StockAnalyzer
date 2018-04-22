@@ -11,6 +11,7 @@ import stockanalyzer.model.StockModel.StockEntry;
 import stockanalyzer.model.StockModel.TimedValue;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -67,7 +68,7 @@ public class StockView {
         stockView.setLayout(g);
         
         JPanel leftP = new JPanel();
-        leftP.setPreferredSize(new Dimension(700,800));
+        leftP.setPreferredSize(new Dimension(600,800));
         stockView.add(leftP);
         vcons.gridx = 0;
         vcons.gridy = 0;
@@ -260,6 +261,7 @@ public class StockView {
         cons.gridx = 0;
         cons.gridy = 10;
         pearsonButton = new JButton("Pearson Correlation");
+        cons.weightx = 0;
         cons.insets = new Insets(14,0,0,10);
         stockLayout.setConstraints(pearsonButton, cons);
         compPanel.add(pearsonButton);
@@ -389,6 +391,7 @@ public class StockView {
         options.clear();
 
         options.addAll(Arrays.asList(symbols));
+        options.add(0,""); //Adds empty symbol element
         setComboBoxOptions(smblBox, options);
         smblBox.setEnabled(true);
 
@@ -541,7 +544,7 @@ public class StockView {
      * Gets the currently selected TimeSeries
      */
     public String getTimeSeries() {
-    	return timSerBox.getSelectedItem().toString();
+    	return timSerBox.getSelectedItem().toString().trim();
     }
     
     /**
@@ -550,7 +553,7 @@ public class StockView {
     public String getInterval() {
     	if(timIntBox.getItemCount() == 0) return "1min";
     	
-    	return timIntBox.getSelectedItem().toString();
+    	return timIntBox.getSelectedItem().toString().trim();
     }
     
     /**
@@ -559,22 +562,25 @@ public class StockView {
     public String getOutputSize() {
     	if(outSizBox.getItemCount() == 0) return "FULL";
     	
-    	return outSizBox.getSelectedItem().toString();
+    	return outSizBox.getSelectedItem().toString().trim();
     }
    
     /**
      * Get the selected Symbol
      */
-	public String getSymbol() {
-		return smblBox.getSelectedItem().toString();
+	public String[] getSymbol() {
+	    String[] symbols = new String[2];
+	    symbols[0] = smblBox.getSelectedItem().toString();
+	    symbols[1] = smbl2Box.getSelectedItem().toString();
+		return symbols;
 	}
 
     public String getStartDateField() {
-        return startDateField.getText();
+        return startDateField.getText().trim();
     }
 
     public String getEndDateField() {
-        return endDateField.getText();
+        return endDateField.getText().trim();
     }
 
     public void setSymbols(String[] smbl){
@@ -583,7 +589,7 @@ public class StockView {
 
     }
 
-    public  void setInterval(String[] interval){
+    public void setInterval(String[] interval){
 
         intervals = interval;
 
@@ -603,6 +609,42 @@ public class StockView {
         setComboBoxOptions(timSerBox, options);
 
         defaultOptions();
+
+    }
+
+    public void setApiKeyField(String key) {
+
+	    apiKeyField.setText(key);
+
+    }
+
+    public void setStartDate(String date){
+	    startDateField.setText(date);
+    }
+
+    public void setEndDate(String date){
+	    endDateField.setText(date);
+    }
+
+    public void startDateCorr(Boolean pizza) {
+	    if(pizza) {
+            startDateField.setBorder(BorderFactory.createLineBorder(Color.gray));
+        } else {
+            startDateField.setBorder(BorderFactory.createLineBorder(Color.red));
+        }
+    }
+
+    public void endDateCorr(Boolean pizza) {
+	    if(pizza) {
+            endDateField.setBorder(BorderFactory.createLineBorder(Color.gray));
+        } else {
+            endDateField.setBorder(BorderFactory.createLineBorder(Color.red));
+        }
+    }
+
+    public String getKey(){
+
+	    return apiKeyField.getText().trim();
 
     }
 

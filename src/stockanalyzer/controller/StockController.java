@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import stockanalyzer.json.JSONObject;
 import stockanalyzer.model.APICallParams;
@@ -29,6 +30,8 @@ public class StockController {
 	StockView stockView;
 	StockModel stockModel;
 	StockModel secondSymbolStockModel;
+
+	private String gDate;
 	
 	public StockController() {
 		//Main entrypoint of application
@@ -41,8 +44,7 @@ public class StockController {
 		loadIni();
 	}
 	
-	private void loadIni()
-	{
+	private void loadIni() {
 		Hashtable<String, String[]> ini = new Hashtable<String, String[]>();
 		
 		// TODO check for spaces
@@ -72,7 +74,7 @@ public class StockController {
 		}
 		
 		// TODO demo key doesn't return any data anymore
-		//VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
+		VANTAGE_API_KEY = ini.getOrDefault("API_KEY", new String[] {VANTAGE_API_KEY})[0];
 		String[] time_intervals = ini.getOrDefault("TIME_INTERVAL", new String[] {"1min","5min","15min","30min","60min"});
 		String[] output_size = ini.getOrDefault("OUTPUT_SIZE", new String[] {"compact","full"});
 		String[] time_series = ini.getOrDefault("TIME_SERIES", new String[] {"TIME_SERIES_INTRADAY",
@@ -90,6 +92,7 @@ public class StockController {
         stockView.setOutput(output_size);
         stockView.setSymbols(symbols);
         stockView.setSeries(time_series);
+        stockView.setApiKeyField(VANTAGE_API_KEY);
 
 		/* Dis is data
 		 TIME_INTERVAL = 1min, 5min, 15min, 30min, 60min,
@@ -101,11 +104,7 @@ public class StockController {
 	}
 
 	private void setupView() {
-		stockView.addQueryListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			doQuery();
-		}});
+		stockView.addQueryListener(e -> doQuery());
 
 		stockView.startDateFocusLoss(new FocusListener() {
             @Override
@@ -117,9 +116,10 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getStartDateField())){
-                    System.out.println("True");
+                    stockView.setStartDate(gDate);
+                    stockView.startDateCorr(true);
                 } else {
-                    System.out.println("False");
+                    stockView.startDateCorr(false);
                 }
 
             }
@@ -135,9 +135,10 @@ public class StockController {
             public void focusLost(FocusEvent e) {
 
                 if(validateDate(stockView.getEndDateField())){
-                    System.out.println("True");
+                    stockView.setEndDate(gDate);
+                    stockView.endDateCorr(true);
                 } else {
-                    System.out.println("False");
+                    stockView.endDateCorr(false);
                 }
 
             }
@@ -147,14 +148,19 @@ public class StockController {
 	//Checks if Date is a valid date
 	private boolean validateDate(String date){
 
+	    if(date.trim().equals("")){
+	        gDate = "";
+	        return true;
+        }
+
 	    //Assuming date format is DD.MM.YYYY
-
 	    date = date.trim();
-        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YYYY");
-
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateFormat.setLenient(false);
 
 	    try {
             Date dateParse = dateFormat.parse(date);
+            gDate = date;
         } catch (ParseException e){
 	        return false;
         }
@@ -198,16 +204,39 @@ public class StockController {
 	private void doQuery() {	
 		String ts = stockView.getTimeSeries();
 		String interval = stockView.getInterval();
-		String symbol = stockView.getSymbol();
+		String symbols[] = stockView.getSymbol();
 		String os = stockView.getOutputSize();
-		
-		APICallParams params = new APICallParams(ts, interval, symbol, "JSON", os, VANTAGE_API_KEY);
-		
-		doAPIRequest(params);
-		
-		// TODO do second request IF we have a symbol selected
-		
-		// TODO Calculate Pearsons Correlation if we have both symbols loaded
+		VANTAGE_API_KEY = stockView.getKey();
+
+		if (symbols[0].trim().equals("") && symbols[1].trim().equals("")){
+		    System.out.println("No Symbols chosen!");
+		    return;
+        }
+
+        if(!(symbols[0].trim().equals("")) && symbols[1].trim().equals("")){
+            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+            doAPIRequest(params1);
+        } else if(symbols[0].trim().equals("") && !(symbols[1].trim().equals(""))){
+            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+            doAPIRequest(params2);
+        } else if(!(symbols[0].trim().equals("") && symbols[1].trim().equals(""))){
+            APICallParams params1 = new APICallParams(ts, interval, symbols[0], "JSON", os, VANTAGE_API_KEY);
+            APICallParams params2 = new APICallParams(ts, interval, symbols[1], "JSON", os, VANTAGE_API_KEY);
+
+            /*
+            doAPIRequest(params1);
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException e){
+                //;(
+            }
+            doAPIRequest(params2);
+            */
+
+            // TODO Get screamed at by Patrick for making many if's
+            // TODO Do second request IF we have a symbol selected
+            // TODO Calculate Pearsons Correlation if we have both symbols loaded
+        }
 		
 		double correlation = 0; // = CorrelationCalc(stockModel.getData(), secondSymbolStockModel.getData());
 		
