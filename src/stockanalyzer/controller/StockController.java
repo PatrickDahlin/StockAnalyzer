@@ -274,7 +274,6 @@ public class StockController {
 		
 	}
 
-	
 	private StockModel filterModelByTimeInterval(StockModel model, Date start, Date end)
 	{
 		
