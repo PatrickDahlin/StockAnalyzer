@@ -467,6 +467,7 @@ public class StockView {
     		graphData2.add(new Date());
 
     	chart.removeSeries("Symbol 1");
+    	chart.removeSeries("Symbol 2");
 
     	chart.addSeries("Symbol 1", graphData2, graphData);
 
@@ -477,7 +478,6 @@ public class StockView {
             if(graphData4.size() == 0)
                 graphData4.add(new Date());
 
-            chart.removeSeries("Symbol 2");
             chart.addSeries("Symbol 2", graphData4, graphData3);
 
         }
